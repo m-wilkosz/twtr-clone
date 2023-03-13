@@ -15,6 +15,7 @@
         -> Image
     -> Deleting
     -> Retweeting
+    -> Liking
 3. Following
 
 Long term todos
