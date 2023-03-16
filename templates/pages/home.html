@@ -72,6 +72,9 @@
             } else if (xhr.status === 401) {
                 alert('you must login')
                 window.location.href = '/login'
+            } else if (xhr.status === 403) {
+                alert('you must login')
+                window.location.href = '/login'
             } else if (xhr.status === 500) {
                 alert('there was a server error')
             }
