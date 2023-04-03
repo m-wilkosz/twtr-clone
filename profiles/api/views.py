@@ -13,6 +13,9 @@ User = get_user_model()
 def user_follow_view(request, username, *args, **kwargs):
     current_user = request.user
     to_follow_user_qs = User.objects.filter(username=username)
+    if current_user.username == username:
+        current_user_followers_qs = current_user.profile.followers.all()
+        return Response({"count": current_user_followers_qs.count()}, status=200)
     if not to_follow_user_qs.exists():
         return Response({}, status=404)
     to_follow_user = to_follow_user_qs.first()
