@@ -32,6 +32,19 @@ def tweet_list_view(request, *args, **kwargs):
     return Response(serializer.data)
 
 @api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def tweet_feed_view(request, *args, **kwargs):
+    user = request.user
+    profiles = user.following.all()
+    followed_users_id = []
+    if profiles.exists():
+        followed_users_id = [x.user.id for x in profiles]
+    followed_users_id.append(user.id)
+    qs = Tweet.objects.filter(user__id__in=followed_users_id).order_by("-timestamp")
+    serializer = TweetSerializer(qs, many=True)
+    return Response(serializer.data)
+
+@api_view(["GET"])
 def tweet_detail_view(request, tweet_id, *args, **kwargs):
     qs = Tweet.objects.filter(id=tweet_id)
     if not qs.exists():
