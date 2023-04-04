@@ -1,22 +1,25 @@
-import { backendLookup } from '../lookup'
+import { backendLookup } from "../lookup"
 
 export function apiTweetCreate(newTweet, callback) {
-    backendLookup('POST', '/tweets/create/', callback, {content: newTweet})
+    backendLookup("POST", "/tweets/create/", callback, {content: newTweet})
 }
 
 export function apiTweetAction(tweetId, action, callback) {
     const data = {id: tweetId, action: action}
-    backendLookup('POST', '/tweets/action/', callback, data)
+    backendLookup("POST", "/tweets/action/", callback, data)
 }
 
 export function apiTweetDetail(tweetId, callback) {
-    backendLookup('GET', `/tweets/${tweetId}/`, callback)
+    backendLookup("GET", `/tweets/${tweetId}/`, callback)
 }
 
-export function apiTweetList(username, callback) {
-    let endpoint = '/tweets/'
+export function apiTweetList(username, callback, nextUrl) {
+    let endpoint = "/tweets/"
     if (username) {
         endpoint = `/tweets/?username=${username}`
     }
-    backendLookup('GET', endpoint, callback)
+    if (nextUrl !== null &&  nextUrl !== undefined) {
+        endpoint = nextUrl.replace("http://localhost:8000/api", "")
+    }
+    backendLookup("GET", endpoint, callback)
 }

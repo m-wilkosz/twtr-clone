@@ -35,6 +35,23 @@ export function TweetsList(props) {
       updateFinalTweets.unshift(tweets)
       setTweets(updateFinalTweets)
     }
+    const handleLoadNext = (event) => {
+      event.preventDefault()
+      if (nextUrl !== null) {
+        const handleLoadNextResponse = (response, status) => {
+          if (status === 200) {
+            setNextUrl(response.next)
+            const newTweets = [...tweets].concat(response.results)
+            setTweetsInit(newTweets)
+            setTweets(newTweets)
+          } else {
+            alert("there was an error")
+          }
+        }
+        apiTweetList(props.username, handleLoadNextResponse, nextUrl)
+      }
+    }
+
     return <React.Fragment>{tweets.map((item, index)=>{
       return <Tweet
         tweet={item}
@@ -42,6 +59,6 @@ export function TweetsList(props) {
         className="my-5 py-5 border bg-white text-dark"
         key={`${index}-{item.id}`}/>
     })}
-    { nextUrl !== null && <button>load next</button>}
+    {nextUrl !== null && <button onClick={handleLoadNext} className="btn btn-outline-primary">load next</button>}
     </React.Fragment>
 }
