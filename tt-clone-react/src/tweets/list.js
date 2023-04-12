@@ -58,11 +58,17 @@ export function TweetsList(props) {
       }
     }
 
+    const handleDeleteSuccess = (deletedTweetId) => {
+      setTweetsInit(tweets.filter((tweet) => tweet.id !== deletedTweetId))
+      setTweets(tweets.filter((tweet) => tweet.id !== deletedTweetId))
+    }
+
     return !isLoading ? <React.Fragment>{tweets.map((item, index) => {
       return <Tweet
         tweet={item}
         currentUser={currentUser}
         didRetweet={handleDidRetweet}
+        onDeleteSuccess={handleDeleteSuccess}
         className="my-5 py-5 border bg-white text-dark"
         key={`${index}-{item.id}`}/>
     })}
