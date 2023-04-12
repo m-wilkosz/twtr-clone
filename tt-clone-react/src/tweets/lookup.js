@@ -31,3 +31,7 @@ export function apiTweetFeed(callback, nextUrl) {
     }
     backendLookup("GET", endpoint, callback)
 }
+
+export function apiTweetDelete(tweetId, callback) {
+    backendLookup("DELETE", `/tweets/${tweetId}/delete/`, callback)
+}

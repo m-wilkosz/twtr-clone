@@ -7,12 +7,14 @@ export function FeedList(props) {
     const [tweets, setTweets] = useState([])
     const [nextUrl, setNextUrl] = useState(null)
     const [tweetsDidSet, setTweetsDidSet] = useState(false)
+
     useEffect(() => {
       const final = [...props.newTweets].concat(tweetsInit)
       if (final.length !== tweets.length) {
         setTweets(final)
       }
     }, [props.newTweets, tweets, tweetsInit])
+
     useEffect(() => {
       if (tweetsDidSet === false) {
         const handleTweetListLookup = (response, status) => {
@@ -25,6 +27,7 @@ export function FeedList(props) {
         apiTweetFeed(handleTweetListLookup)
       }
     }, [tweetsInit, tweetsDidSet, setTweetsDidSet, props.username])
+
     const handleDidRetweet = (newTweet) => {
       const updateTweetsInit = [...tweetsInit]
       updateTweetsInit.unshift(newTweet)
@@ -33,6 +36,7 @@ export function FeedList(props) {
       updateFinalTweets.unshift(tweets)
       setTweets(updateFinalTweets)
     }
+
     const handleLoadNext = (event) => {
       event.preventDefault()
       if (nextUrl !== null) {

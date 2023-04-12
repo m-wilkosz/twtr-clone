@@ -58,7 +58,7 @@ export function TweetsList(props) {
       }
     }
 
-    return !isLoading ? <React.Fragment>{tweets.map((item, index)=>{
+    return !isLoading ? <React.Fragment>{tweets.map((item, index) => {
       return <Tweet
         tweet={item}
         currentUser={currentUser}

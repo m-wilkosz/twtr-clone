@@ -23,3 +23,13 @@ export function ActionBtn(props) {
 
     return <button className={className} onClick={handleClick}>{display}</button>
 }
+
+export function DeleteBtn(props) {
+  const {tweet, onDelete} = props
+
+  const handleDelete = () => {
+    onDelete(tweet.id)
+  }
+
+  return <button onClick={handleDelete}>Delete</button>
+}

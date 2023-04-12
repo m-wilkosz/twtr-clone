@@ -65,7 +65,7 @@ def tweet_delete_view(request, tweet_id, *args, **kwargs):
         return Response({"message": "you cannot delete this tweet"}, status=401)
     obj = qs.first()
     obj.delete()
-    return Response({"message": "tweet removed"}, status=200)
+    return Response({"message": "tweet removed"}, status=204)
 
 @api_view(["POST"])
 @permission_classes([IsAuthenticated])
