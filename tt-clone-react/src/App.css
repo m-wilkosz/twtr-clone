@@ -36,3 +36,37 @@
     transform: rotate(360deg);
   }
 }
+
+.sidebar {
+  width: 250px;
+  height: 100%;
+  background-color: #f8f9fa;
+  padding: 20px;
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+
+.sidebar ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.sidebar li {
+  padding: 10px 0;
+  cursor: pointer;
+}
+
+.sidebar li:hover {
+  color: #007bff;
+}
+
+.App {
+  display: flex;
+  min-height: 100vh;
+}
+
+.content {
+  margin-left: 250px;
+  padding: 20px;
+}
