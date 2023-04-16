@@ -4,12 +4,11 @@ import {apiTweetAction} from "./lookup"
 export function ActionBtn(props) {
     const {tweet, action, didPerformAction} = props
     const likes = tweet.likes ? tweet.likes : 0
-    const className = props.className ? props.className : "btn-primary btn-sm"
-    const actionDisplay = action.display ? action.display : "action"
+    const className = props.className ? props.className : "btn btn-primary btn-sm rounded-pill me-1"
 
     const handleActionBackendEvent = (response, status) => {
       console.log(response, status)
-      if ((status === 200 || status === 201) && didPerformAction){
+      if ((status === 200 || status === 201) && didPerformAction) {
         didPerformAction(response, status)
       }
     }
@@ -19,9 +18,20 @@ export function ActionBtn(props) {
       apiTweetAction(tweet.id, action.type, handleActionBackendEvent)
     }
 
-    const display = action.type === "like" ? `${likes} ${actionDisplay}` : actionDisplay
+    let iconClass = ""
+    if (action.type === "like") {
+      iconClass = "fas fa-thumbs-up"
+    } else if (action.type === "unlike") {
+      iconClass = "fas fa-thumbs-down"
+    } else if (action.type === "retweet") {
+      iconClass = "fas fa-retweet"
+    }
 
-    return <button className={className} onClick={handleClick}>{display}</button>
+    const display = action.type === "like" ? `${likes} ` : ""
+
+    return <button className={className} onClick={handleClick}>
+      {display} <i className={iconClass}></i>
+      </button>
 }
 
 export function DeleteBtn(props) {
@@ -31,5 +41,7 @@ export function DeleteBtn(props) {
     onDelete(tweet.id)
   }
 
-  return <button onClick={handleDelete}>Delete</button>
+  return <button className="btn btn-danger btn-sm rounded-pill me-1" onClick={handleDelete}>
+    <i className="fas fa-trash"></i>
+    </button>
 }
