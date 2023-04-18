@@ -14,7 +14,7 @@ def login_view(request, *args, **kwargs):
 def logout_view(request, *args, **kwargs):
     if request.method == "POST":
         logout(request)
-        return redirect("/login")
+        return redirect("/login/")
     context = {"form": None, "description": "Are you sure you want to logout?", "btn_label": "Click to confirm", "title": "Logout"}
     return render(request, "accounts/auth.html", context)
 
