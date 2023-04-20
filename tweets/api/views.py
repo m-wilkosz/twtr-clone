@@ -95,6 +95,16 @@ def tweet_action_view(request, *args, **kwargs):
             return Response(serializer.data, status=201)
     return Response({}, status=200)
 
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def search_tweets(request, *args, **kwargs):
+    query = request.GET.get("q", "")
+    if query:
+        queryset = Tweet.objects.filter(content__icontains=query)
+        serializer = TweetSerializer(queryset, many=True)
+        return Response(serializer.data, status=200)
+    return Response([], status=200)
+
 def tweet_create_view_pure_django(request, *args, **kwargs):
     user = request.user
     if not request.user.is_authenticated:

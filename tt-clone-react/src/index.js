@@ -6,6 +6,7 @@ import {ProfileBadgeComponent} from "./profiles"
 import {FeedComponent, TweetsComponent, TweetDetailComponent} from "./tweets"
 import SidebarComponent from "./sidebar/sidebar"
 import reportWebVitals from "./reportWebVitals"
+import { SearchTweets } from "./tweets/searchbar"
 
 const appEl = document.getElementById("root")
 if (appEl) {
@@ -17,6 +18,15 @@ if (appEl) {
   )
 }
 
+const searchbarEl = document.getElementById("search-bar")
+if (searchbarEl) {
+  const root = ReactDOM.createRoot(searchbarEl)
+  root.render(
+    <React.StrictMode>
+      <SearchTweets />
+    </React.StrictMode>
+  )
+}
 const e = React.createElement
 const tweetsEl = document.getElementById("tweets-react")
 if (tweetsEl) {
