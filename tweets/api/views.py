@@ -97,10 +97,10 @@ def tweet_action_view(request, *args, **kwargs):
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
-def search_tweets(request, *args, **kwargs):
+def tweet_search_view(request, *args, **kwargs):
     query = request.GET.get("q", "")
     if query:
-        queryset = Tweet.objects.filter(content__icontains=query)
+        queryset = Tweet.objects.filter(content__iexact=query)
         serializer = TweetSerializer(queryset, many=True)
         return Response(serializer.data, status=200)
     return Response([], status=200)
