@@ -11,11 +11,17 @@ export function TweetsList(props) {
     const {currentUser, isLoading} = useCurrentUser()
 
     useEffect(() => {
-      const final = [...props.newTweets].concat(tweetsInit)
-      if (final.length !== tweets.length) {
-        setTweets(final)
+      if (props.searchedTweets === null) {
+        setTweets(tweetsInit);
+      } else if (props.searchedTweets) {
+        setTweets(props.searchedTweets);
+      } else {
+        const final = [...props.newTweets].concat(tweetsInit);
+        if (final.length !== tweets.length) {
+          setTweets(final);
+        }
       }
-    }, [props.newTweets, tweets, tweetsInit])
+    }, [props.searchedTweets, props.newTweets, tweets, tweetsInit])
 
     useEffect(() => {
       if (tweetsDidSet === false) {

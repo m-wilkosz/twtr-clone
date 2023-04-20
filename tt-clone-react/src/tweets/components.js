@@ -4,6 +4,7 @@ import {TweetCreate} from './create'
 import {Tweet} from './detail'
 import {apiTweetDetail} from './lookup'
 import {FeedList} from './feed'
+import {TweetSearch} from "./searchbar"
 
 export function FeedComponent(props) {
   const [newTweets, setNewTweets] = useState([])
@@ -22,15 +23,20 @@ export function FeedComponent(props) {
 export function TweetsComponent(props) {
   const [newTweets, setNewTweets] = useState([])
   const canTweet = props.canTweet === 'false' ? false : true
+  const [searchResults, setSearchResults] = useState([]);
+
   const handleNewTweet = (newTweet) => {
     let tempNewTweets = [...newTweets]
     tempNewTweets.unshift(newTweet)
     setNewTweets(tempNewTweets)
   }
-  return <div className={props.className}>
-      {canTweet === true && <TweetCreate didTweet={handleNewTweet} className='col-12 mb-3' />}
-    <TweetsList newTweets={newTweets} {...props} />
-  </div>
+  return <div className="container">
+          <TweetSearch setSearchResults={setSearchResults} />
+          <div className={props.className}>
+            {canTweet === true && <TweetCreate didTweet={handleNewTweet} className='col-12 mb-3' />}
+            <TweetsList newTweets={newTweets} searchedTweets={searchResults && searchResults.length > 0 ? searchResults : null} {...props} />
+          </div>
+        </div>
 }
 
 export function TweetDetailComponent(props) {
