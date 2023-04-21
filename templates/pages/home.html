@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if request.user.is_authenticated %}
-    <div id="tweets-react-feed"></div>
+    <div id="root"></div>
 {% else %}
     <div class="container mt-4">
         {% include "components/navbar.html" %}

@@ -1,29 +1,31 @@
-import logo from './logo.svg';
-import './App.css';
-import {TweetsComponent} from './tweets'
+import React from "react"
+import "./App.css"
+import {FeedComponent} from "./tweets"
+import SidebarComponent from "./sidebar/sidebar"
+import {useCurrentUser} from "./auth/hooks"
 
 function App() {
+  const {currentUser, isLoading} = useCurrentUser()
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <div>
-          <TweetsComponent />
+      <div class="container">
+        <div id="search-bar"></div>
+        <div style={{textAlign: "center"}}>
+          <div id="sidebar" style={{margin: "0 auto"}}>
+            <SidebarComponent />
+          </div>
+          <div id="feed">
+            {!isLoading && currentUser ? (
+              <FeedComponent username={currentUser.username} canTweet={true} />
+            ) : (
+              <p>Loading...</p>
+            )}
+          </div>
         </div>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      </div>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
