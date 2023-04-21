@@ -12,13 +12,13 @@ export function TweetsList(props) {
 
     useEffect(() => {
       if (props.searchedTweets === null) {
-        setTweets(tweetsInit);
+        setTweets(tweetsInit)
       } else if (props.searchedTweets) {
-        setTweets(props.searchedTweets);
+        setTweets(props.searchedTweets)
       } else {
-        const final = [...props.newTweets].concat(tweetsInit);
+        const final = [...props.newTweets].concat(tweetsInit)
         if (final.length !== tweets.length) {
-          setTweets(final);
+          setTweets(final)
         }
       }
     }, [props.searchedTweets, props.newTweets, tweets, tweetsInit])
@@ -43,7 +43,7 @@ export function TweetsList(props) {
       updateTweetsInit.unshift(newTweet)
       setTweetsInit(updateTweetsInit)
       const updateFinalTweets = [...tweets]
-      updateFinalTweets.unshift(tweets)
+      updateFinalTweets.unshift(newTweet)
       setTweets(updateFinalTweets)
     }
 
@@ -78,6 +78,6 @@ export function TweetsList(props) {
         className="my-5 py-5 border bg-white text-dark"
         key={`${index}-{item.id}`}/>
     })}
-    {nextUrl !== null && <button onClick={handleLoadNext} className="btn btn-outline-primary">load next</button>}
+    {nextUrl !== null && <button onClick={handleLoadNext} className="btn btn-primary">Next</button>}
     </React.Fragment> : <div>Loading...</div>
 }

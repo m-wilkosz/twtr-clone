@@ -18,7 +18,7 @@ if (appEl) {
 }
 
 const e = React.createElement
-const tweetsEl = document.getElementById("tweets-react")
+const tweetsEl = document.getElementById("")
 if (tweetsEl) {
   const root = ReactDOM.createRoot(tweetsEl)
   root.render(e(TweetsComponent, tweetsEl.dataset))
@@ -33,7 +33,7 @@ if (sidebarEl) {
   )
 }
 
-const tweetsFeedEl = document.getElementById("tweets-react-feed")
+const tweetsFeedEl = document.getElementById("tweets-react")
 if (tweetsFeedEl) {
   const root = ReactDOM.createRoot(tweetsFeedEl)
   root.render(e(FeedComponent, tweetsFeedEl.dataset))
