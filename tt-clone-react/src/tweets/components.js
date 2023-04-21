@@ -1,29 +1,14 @@
 import React, {useEffect, useState} from 'react'
-import {TweetsList} from './list'
+import {TweetFeedList} from './feedlist'
 import {TweetCreate} from './create'
 import {Tweet} from './detail'
 import {apiTweetDetail} from './lookup'
-import {FeedList} from './feed'
 import {TweetSearch} from "./searchbar"
 
 export function FeedComponent(props) {
   const [newTweets, setNewTweets] = useState([])
   const canTweet = props.canTweet === 'false' ? false : true
-  const handleNewTweet = (newTweet) => {
-    let tempNewTweets = [...newTweets]
-    tempNewTweets.unshift(newTweet)
-    setNewTweets(tempNewTweets)
-  }
-  return <div className={props.className}>
-      {canTweet === true && <TweetCreate didTweet={handleNewTweet} className='col-12 mb-3' />}
-    <FeedList newTweets={newTweets} {...props} />
-  </div>
-}
-
-export function TweetsComponent(props) {
-  const [newTweets, setNewTweets] = useState([])
-  const canTweet = props.canTweet === 'false' ? false : true
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState([])
 
   const handleNewTweet = (newTweet) => {
     let tempNewTweets = [...newTweets]
@@ -34,7 +19,26 @@ export function TweetsComponent(props) {
           <TweetSearch setSearchResults={setSearchResults} />
           <div className={props.className}>
             {canTweet === true && <TweetCreate didTweet={handleNewTweet} className='col-12 mb-3' />}
-            <TweetsList newTweets={newTweets} searchedTweets={searchResults && searchResults.length > 0 ? searchResults : null} {...props} />
+            <TweetFeedList newTweets={newTweets} searchedTweets={searchResults && searchResults.length > 0 ? searchResults : null} isFeed={true} {...props} />
+          </div>
+        </div>
+}
+
+export function TweetsComponent(props) {
+  const [newTweets, setNewTweets] = useState([])
+  const canTweet = props.canTweet === 'false' ? false : true
+  const [searchResults, setSearchResults] = useState([])
+
+  const handleNewTweet = (newTweet) => {
+    let tempNewTweets = [...newTweets]
+    tempNewTweets.unshift(newTweet)
+    setNewTweets(tempNewTweets)
+  }
+  return <div className="container">
+          <TweetSearch setSearchResults={setSearchResults} />
+          <div className={props.className}>
+            {canTweet === true && <TweetCreate didTweet={handleNewTweet} className='col-12 mb-3' />}
+            <TweetFeedList newTweets={newTweets} searchedTweets={searchResults && searchResults.length > 0 ? searchResults : null} isFeed={false} {...props} />
           </div>
         </div>
 }
