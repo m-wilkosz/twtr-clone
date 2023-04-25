@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react'
+import {useParams} from 'react-router-dom'
 import {TweetFeedList} from './feedlist'
 import {TweetCreate} from './create'
 import {Tweet} from './detail'
@@ -24,7 +25,7 @@ export function FeedComponent(props) {
         </div>
 }
 
-export function TweetsComponent(props) {
+export function TweetComponent(props) {
   const [newTweets, setNewTweets] = useState([])
   const canTweet = props.canTweet === 'false' ? false : true
   const [searchResults, setSearchResults] = useState([])
@@ -41,6 +42,11 @@ export function TweetsComponent(props) {
             <TweetFeedList newTweets={newTweets} searchedTweets={searchResults && searchResults.length > 0 ? searchResults : null} isFeed={false} {...props} />
           </div>
         </div>
+}
+
+export function TweetDetailComponentWrapper() {
+  const { tweetId } = useParams();
+  return <TweetDetailComponent tweetId={tweetId} />;
 }
 
 export function TweetDetailComponent(props) {

@@ -2,6 +2,7 @@ import React, {useState} from "react"
 import {ActionBtn, DeleteBtn} from "./buttons"
 import {apiTweetDelete} from "./lookup"
 import {UserDisplay, UserPicture} from "../profiles"
+import {Link} from "react-router-dom"
 
 export function ParentTweet(props) {
     const {tweet, onDeleteSuccess} = props
@@ -13,15 +14,6 @@ export function Tweet(props) {
     const [actionTweet, setActionTweet] = useState(props.tweet ? props.tweet : null)
     let className = props.className ? props.className : "col-10 mx-auto col-md-6"
     className = isRetweet === true ? `${className} p-2 border rounded` : className
-    //const path = window.location.pathname
-    //const match = path.match(/(?<tweetid>\d+)/)
-    //const urlTweetId = match ? match.groups.tweetid : -1
-    //const isDetail = `${tweet.id}` === `${urlTweetId}`
-
-    const handleLink = (event, tweetId) => {
-      event.preventDefault()
-      window.location.href = `/${tweetId}`
-    }
 
     const handlePerformAction = (newActionTweet, status) => {
       if (status === 200) {
@@ -57,10 +49,7 @@ export function Tweet(props) {
             <UserPicture user={tweet.user} />
           </div>
           <div className="col-11">
-          <a href={`/${tweet.id}`}
-            onClick={(event) => handleLink(event, tweet.id)}
-            className="tweet-wrapper"
-            style={{ textDecoration: "none", color: "inherit" }}>
+          <Link to={`/${tweet.id}`} className="tweet-wrapper" style={{ textDecoration: "none", color: "inherit" }}>
             <div>
               <p>
                 <UserDisplay includeFullName user={tweet.user} />
@@ -72,7 +61,7 @@ export function Tweet(props) {
                 onDeleteSuccess={onDeleteSuccess}
               />
             </div>
-          </a>
+          </Link>
           <div className="btn btn-group px-0">
             {actionTweet && hideActions !== true && (
               <React.Fragment>
