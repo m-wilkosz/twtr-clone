@@ -1,10 +1,10 @@
-import React, {useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
-import {TweetFeedList} from './feedlist'
-import {TweetCreate} from './create'
-import {Tweet} from './detail'
-import {apiTweetDetail} from './lookup'
+import React, {useEffect, useState} from "react"
+import {useParams} from "react-router-dom"
+import {TweetFeedList} from "./feedlist"
 import {TweetSearch} from "./searchbar"
+import {TweetCreate} from "./create"
+import {Tweet} from "./detail"
+import {apiTweetDetail, apiTweetComments} from "../lookup"
 
 export function FeedComponent(props) {
   const [newTweets, setNewTweets] = useState([])
@@ -67,4 +67,30 @@ export function TweetDetailComponent(props) {
     }
   }, [tweetId, didLookup, setDidLookup])
   return tweet === null ? null : <Tweet tweet={tweet} className={props.className} />
+}
+
+export function TweetComments(props) {
+  const {tweet} = props
+  const [comments, setComments] = useState([])
+
+  useEffect(() => {
+      apiTweetComments(tweet.id, (response, status) => {
+          if (status === 200) {
+              setComments(response)
+          }
+      })
+  }, [tweet])
+
+  return (
+      <div>
+          <h4>Comments</h4>
+          {comments.map((comment, index) => {
+              return (
+                  <div key={index}>
+                      <Tweet tweet={comment} />
+                  </div>
+              )
+          })}
+      </div>
+  )
 }
