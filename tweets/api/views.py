@@ -31,6 +31,11 @@ def tweet_list_view(request, *args, **kwargs):
         qs = qs.by_username(username)
     return get_paginated_queryset_response(qs, request)
 
+@api_view(["GET"])
+def tweet_comments_view(request, tweet_id, *args, **kwargs):
+    qs = Tweet.objects.filter(parent__id=tweet_id)
+    return get_paginated_queryset_response(qs, request)
+
 def get_paginated_queryset_response(qs, request):
     paginator = PageNumberPagination()
     paginator.page_size = 20

@@ -8,6 +8,7 @@ from .views import (
         tweet_feed_view,
         tweet_detail_view,
         tweet_search_view,
+        tweet_comments_view,
     )
 
 urlpatterns = [
@@ -18,4 +19,5 @@ urlpatterns = [
     path('<int:tweet_id>/', tweet_detail_view),
     path('<int:tweet_id>/delete/', tweet_delete_view),
     path("search/", tweet_search_view),
+    path('<int:tweet_id>/comments/', tweet_comments_view, name="tweet-comments"),
 ]
