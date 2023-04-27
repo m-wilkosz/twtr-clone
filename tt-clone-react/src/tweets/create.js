@@ -1,8 +1,27 @@
 import React from "react"
 import {apiTweetCreate, apiReplyCreate} from "./lookup"
 
-export function TweetCreate(props) {
+function CreateForm({onSubmit, placeholder}) {
   const textAreaRef = React.createRef()
+
+  const handleSubmit = (event) => {
+    event.preventDefault()
+    const newVal = textAreaRef.current.value
+    onSubmit(newVal)
+    textAreaRef.current.value = ""
+  }
+
+  return (
+    <div className="create-form">
+      <form onSubmit={handleSubmit}>
+        <input ref={textAreaRef} required={true} className="form-control" placeholder={placeholder} name="content"></input>
+        <button type="submit" className="btn btn-primary my-3">Send</button>
+      </form>
+    </div>
+  )
+}
+
+export function TweetCreate(props) {
   const {didTweet} = props
 
   const handleBackendUpdate = (response, status) => {
@@ -14,23 +33,18 @@ export function TweetCreate(props) {
     }
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const newVal = textAreaRef.current.value
+  const handleSubmit = (newVal) => {
     apiTweetCreate(newVal, handleBackendUpdate)
-    textAreaRef.current.value = ""
   }
 
-  return <div className={props.className}>
-          <form onSubmit={handleSubmit}>
-            <input ref={textAreaRef} required={true} className="form-control" placeholder="Write your tweet here..." name="tweet"></input>
-            <button type="submit" className="btn btn-primary my-3">Send tweet</button>
-          </form>
-        </div>
+  return (
+    <div className={props.className}>
+      <CreateForm onSubmit={handleSubmit} placeholder="Write your tweet here..." />
+    </div>
+  )
 }
 
 export function ReplyCreate(props) {
-  const textAreaRef = React.createRef()
   const {didReply, upperTweetId} = props
 
   const handleBackendUpdate = (response, status) => {
@@ -42,17 +56,13 @@ export function ReplyCreate(props) {
     }
   }
 
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const newVal = textAreaRef.current.value
+  const handleSubmit = (newVal) => {
     apiReplyCreate(newVal, upperTweetId, handleBackendUpdate)
-    textAreaRef.current.value = ""
   }
 
-  return <div className={props.className}>
-          <form onSubmit={handleSubmit}>
-            <input ref={textAreaRef} required={true} className="form-control" placeholder="Write your reply here..." name="reply"></input>
-            <button type="submit" className="btn btn-primary my-3">Send reply</button>
-          </form>
-        </div>
+  return (
+    <div className={props.className}>
+      <CreateForm onSubmit={handleSubmit} placeholder="Write your reply here..." />
+    </div>
+  )
 }
