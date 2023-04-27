@@ -1,13 +1,9 @@
 from django.conf import settings
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
-from django.utils.http import is_safe_url
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from ..forms import TweetForm
 from ..models import Tweet
 from ..serializers import TweetSerializer, TweetActionSerializer, TweetCreateSerializer
 
@@ -23,17 +19,36 @@ def tweet_create_view(request, *args, **kwargs):
         return Response(serializer.data, status=201)
     return Response({}, status=400)
 
+@api_view(["POST"])
+# @authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
+def tweet_reply_create_view(request, tweet_id, *args, **kwargs):
+    print(request.data)
+    try:
+        tweet = Tweet.objects.get(id=tweet_id)
+    except Tweet.DoesNotExist:
+        return Response({"detail": "Tweet not found."}, status=404)
+    serializer = TweetCreateSerializer(data=request.data)
+    if serializer.is_valid(raise_exception=True):
+        serializer.save(user=request.user, upper_tweet=tweet, is_reply=True)
+        return Response(serializer.data, status=201)
+    return Response({}, status=400)
+
+@api_view(["GET"])
+def tweet_replies_list_view(request, tweet_id, *args, **kwargs):
+    try:
+        tweet = Tweet.objects.get(id=tweet_id)
+    except Tweet.DoesNotExist:
+        return Response({"detail": "Tweet not found."}, status=404)
+    qs = Tweet.objects.filter(upper_tweet=tweet)
+    return get_paginated_queryset_response(qs, request)
+
 @api_view(["GET"])
 def tweet_list_view(request, *args, **kwargs):
     qs = Tweet.objects.all()
     username = request.GET.get("username")
     if username != None:
         qs = qs.by_username(username)
-    return get_paginated_queryset_response(qs, request)
-
-@api_view(["GET"])
-def tweet_comments_view(request, tweet_id, *args, **kwargs):
-    qs = Tweet.objects.filter(parent__id=tweet_id)
     return get_paginated_queryset_response(qs, request)
 
 def get_paginated_queryset_response(qs, request):
@@ -109,51 +124,3 @@ def tweet_search_view(request, *args, **kwargs):
         serializer = TweetSerializer(queryset, many=True)
         return Response(serializer.data, status=200)
     return Response([], status=200)
-
-def tweet_create_view_pure_django(request, *args, **kwargs):
-    user = request.user
-    if not request.user.is_authenticated:
-        user = None
-        if request.is_ajax():
-            return JsonResponse({}, status=401)
-        return redirect(settings.LOGIN_URL)
-    form = TweetForm(request.POST or None)
-    next_url = request.POST.get("next") or None
-    if form.is_valid():
-        obj = form.save(commit=False)
-        obj.user = user
-        obj.save()
-        if request.is_ajax():
-            return JsonResponse(obj.serialize(), status=201)
-        if next_url != None and is_safe_url(next_url, ALLOWED_HOSTS):
-            return redirect(next_url)
-        form = TweetForm()
-    if form.errors:
-        if request.is_ajax():
-            return JsonResponse(form.errors, status=400)
-    return render(request, "components/form.html", context={"form": form})
-
-def tweet_list_view_pure_django(request, *args, **kwargs):
-    qs = Tweet.objects.all()
-    tweets_list = [x.serialize() for x in qs]
-    data = {
-        "response": tweets_list
-    }
-    return JsonResponse(data)
-
-def tweet_detail_view_pure_django(request, tweet_id, *args, **kwargs):
-
-    data = {
-        "id": tweet_id,
-    }
-
-    status = 200
-
-    try:
-        obj = Tweet.objects.get(id=tweet_id)
-        data["content"] = obj.content
-    except:
-        data["message"] = "Not found"
-        status = 404
-
-    return JsonResponse(data, status=status)

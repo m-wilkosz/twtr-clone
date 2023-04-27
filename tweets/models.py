@@ -31,12 +31,14 @@ class TweetManager(models.Manager):
         return self.get_queryset().feed(user)
 
 class Tweet(models.Model):
-    parent = models.ForeignKey("self", null=True, on_delete=models.SET_NULL, related_name="comments")
+    parent = models.ForeignKey("self", null=True, on_delete=models.SET_NULL)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="tweets")
     likes = models.ManyToManyField(User, related_name="tweet_user", blank=True, through=TweetLike)
     content = models.TextField(blank=True, null=True)
     image = models.FileField(upload_to="images/", blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+    is_reply = models.BooleanField(default=False)
+    upper_tweet = models.ForeignKey("self", null=True, on_delete=models.SET_NULL, related_name="replies")
 
     objects = TweetManager()
 

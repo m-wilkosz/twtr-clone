@@ -22,3 +22,5 @@ Long term todos
 - Notifications
 - DM
 - Explore tab
+- Hashtags
+- Infinite scroll

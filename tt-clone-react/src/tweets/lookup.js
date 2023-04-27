@@ -39,7 +39,3 @@ export function apiTweetDelete(tweetId, callback) {
 export function apiTweetSearch(searchTerm, callback) {
     backendLookup("GET", `/tweets/search/?q=${encodeURIComponent(searchTerm)}`, callback)
 }
-
-export function apiTweetComments(tweetId, callback) {
-    backendLookup("GET", `/tweets/${tweetId}/comments/`, callback)
-}
