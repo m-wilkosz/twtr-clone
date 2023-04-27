@@ -12,14 +12,12 @@ export function TweetFeedList(props) {
 
     useEffect(() => {
       if (props.searchedTweets === null) {
-        setTweets(tweetsInit)
-      } else if (props.searchedTweets) {
-        setTweets(props.searchedTweets)
-      } else {
         const final = [...props.newTweets].concat(tweetsInit)
         if (final.length !== tweets.length) {
           setTweets(final)
         }
+      } else if (props.searchedTweets) {
+        setTweets(props.searchedTweets)
       }
     }, [props.searchedTweets, props.newTweets, tweets, tweetsInit])
 

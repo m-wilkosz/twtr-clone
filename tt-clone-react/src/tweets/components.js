@@ -6,7 +6,7 @@ import {TweetCreate, ReplyCreate} from "./create"
 import {Tweet} from "./detail"
 import {apiTweetDetail, apiRepliesList} from "./lookup"
 
-export function FeedComponent(props) {
+export function FeedOrProfileTweetsComponent(props) {
   const [newTweets, setNewTweets] = useState([])
   const canTweet = props.canTweet === "false" ? false : true
   const [searchResults, setSearchResults] = useState([])
@@ -21,29 +21,17 @@ export function FeedComponent(props) {
           <TweetSearch setSearchResults={setSearchResults} />
           <div className={props.className}>
             {canTweet === true && <TweetCreate didTweet={handleNewTweet} className="col-12 mb-3" />}
-            <TweetFeedList newTweets={newTweets} searchedTweets={searchResults && searchResults.length > 0 ? searchResults : null} isFeed={true} {...props} />
+            <TweetFeedList newTweets={newTweets} searchedTweets={searchResults && searchResults.length > 0 ? searchResults : null} isFeed={props.isFeed} {...props} />
           </div>
         </div>
 }
 
-export function TweetComponent(props) {
-  const [newTweets, setNewTweets] = useState([])
-  const canTweet = props.canTweet === "false" ? false : true
-  const [searchResults, setSearchResults] = useState([])
+export function FeedComponent(props) {
+  return <FeedOrProfileTweetsComponent isFeed={true} {...props} />
+}
 
-  const handleNewTweet = (newTweet) => {
-    let tempNewTweets = [...newTweets]
-    tempNewTweets.unshift(newTweet)
-    setNewTweets(tempNewTweets)
-  }
-
-  return <div className="container">
-          <TweetSearch setSearchResults={setSearchResults} />
-          <div className={props.className}>
-            {canTweet === true && <TweetCreate didTweet={handleNewTweet} className="col-12 mb-3" />}
-            <TweetFeedList newTweets={newTweets} searchedTweets={searchResults && searchResults.length > 0 ? searchResults : null} isFeed={false} {...props} />
-          </div>
-        </div>
+export function ProfileTweetsComponent(props) {
+  return <FeedOrProfileTweetsComponent isFeed={false} {...props} />
 }
 
 export function TweetDetailComponentWrapper() {
