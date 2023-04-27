@@ -62,7 +62,7 @@ def get_paginated_queryset_response(qs, request):
 @permission_classes([IsAuthenticated])
 def tweet_feed_view(request, *args, **kwargs):
     user = request.user
-    qs = Tweet.objects.feed(user)
+    qs = Tweet.objects.feed(user).filter(is_reply=False)
     return get_paginated_queryset_response(qs, request)
 
 @api_view(["GET"])
