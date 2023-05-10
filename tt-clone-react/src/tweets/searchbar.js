@@ -25,9 +25,9 @@ export function TweetSearch(props) {
     }, [searchTerm, setSearchResults])
 
     return (
-        <form className="d-flex mt-4 w-50" role="search">
+        <form className="d-flex mt-2 w-50 p-2" role="search">
             <input
-                className="form-control me-2"
+                className="form-control me-2 rounded-pill p-2"
                 type="search"
                 placeholder="Search twitter"
                 aria-label="Search"

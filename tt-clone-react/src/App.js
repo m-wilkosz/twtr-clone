@@ -10,10 +10,10 @@ function App() {
 
   return (
     <div className="App">
-      <div className="container">
+      <div className="container" style={{marginLeft: "500px"}}>
         <div id="search-bar"></div>
         <div style={{textAlign: "center"}}>
-          <div id="sidebar" style={{margin: "0 auto"}}>
+          <div id="sidebar" style={{margin: "0 auto", textAlign: "right"}}>
             <SidebarComponent />
           </div>
           <Router>

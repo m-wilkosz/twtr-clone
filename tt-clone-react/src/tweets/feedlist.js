@@ -81,7 +81,7 @@ export function TweetFeedList(props) {
         currentUser={currentUser}
         didRetweet={handleDidRetweet}
         onDeleteSuccess={handleDeleteSuccess}
-        className="my-5 py-5 border bg-white text-dark"
+        className="my-4 py-2 border bg-white text-dark rounded-pill w-50"
         key={`${index}-{item.id}`}/>
     })}
     {nextUrl !== null && <button onClick={handleLoadNext} className="btn btn-primary">Next</button>}

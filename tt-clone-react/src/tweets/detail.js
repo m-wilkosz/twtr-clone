@@ -45,15 +45,13 @@ export function Tweet(props) {
           </div>
         )}
         <div className="d-flex">
-          <div className="">
+          <div className="col-3 my-auto p-2">
             <UserPicture user={tweet.user} />
+            <br /><br /><p><UserDisplay includeFullName user={tweet.user} /></p>
           </div>
-          <div className="col-11">
+          <div className="col-8">
           <Link to={`/${tweet.id}`} className="tweet-wrapper" style={{ textDecoration: "none", color: "inherit" }}>
             <div>
-              <p>
-                <UserDisplay includeFullName user={tweet.user} />
-              </p>
               <p>{tweet.content}</p>
               <ParentTweet
                 tweet={tweet}
@@ -62,6 +60,7 @@ export function Tweet(props) {
               />
             </div>
           </Link>
+          <br />
           <div className="btn btn-group px-0">
             {actionTweet && hideActions !== true && (
               <React.Fragment>

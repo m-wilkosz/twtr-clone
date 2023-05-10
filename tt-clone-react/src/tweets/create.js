@@ -12,10 +12,10 @@ function CreateForm({onSubmit, placeholder}) {
   }
 
   return (
-    <div className="create-form">
+    <div className="create-form p-2">
       <form onSubmit={handleSubmit}>
-        <input ref={textAreaRef} required={true} className="form-control" placeholder={placeholder} name="content"></input>
-        <button type="submit" className="btn btn-primary my-3">Send</button>
+        <input ref={textAreaRef} required={true} className="form-control me-2 rounded-pill p-4" placeholder={placeholder} name="content"></input>
+        <button type="submit" className="btn btn-primary my-3 rounded-pill p-3 w-25"><i className="fas fa-paper-plane"></i>&emsp;Send</button>
       </form>
     </div>
   )

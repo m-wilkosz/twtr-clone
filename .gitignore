@@ -386,3 +386,5 @@ google-services.json
 
 # Android Profiling
 *.hprof
+
+.checked

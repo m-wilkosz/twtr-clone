@@ -2,8 +2,8 @@ import React from "react"
 
 const SidebarComponent = () => {
   return (
-    <div className="sidebar">
-      <h3>Sidebar</h3>
+    <div className="sidebar w-25">
+      <h3>TWTR</h3>
       <ul>
         <li>Home</li>
         <li>Explore</li>
