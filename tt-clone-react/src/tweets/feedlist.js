@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react"
+import React, {useEffect, useState, useCallback} from "react"
 import {apiTweetList, apiTweetFeed} from "./lookup"
 import {Tweet} from "./detail"
 import {useCurrentUser} from "../auth/hooks"
@@ -9,6 +9,7 @@ export function TweetFeedList(props) {
     const [nextUrl, setNextUrl] = useState(null)
     const [tweetsDidSet, setTweetsDidSet] = useState(false)
     const {currentUser, isLoading} = useCurrentUser()
+    const sentinel = React.useRef()
 
     useEffect(() => {
       if (props.searchedTweets === null) {
@@ -49,8 +50,10 @@ export function TweetFeedList(props) {
       setTweets(updateFinalTweets)
     }
 
-    const handleLoadNext = (event) => {
-      event.preventDefault()
+    const handleLoadNext = useCallback((event) => {
+      if (event) {
+        event.preventDefault()
+      }
       if (nextUrl !== null) {
         const handleLoadNextResponse = (response, status) => {
           if (status === 200) {
@@ -68,7 +71,27 @@ export function TweetFeedList(props) {
           apiTweetList(props.username, handleLoadNextResponse, nextUrl)
         }
       }
-    }
+    }, [tweets, nextUrl, props.isFeed, props.username])
+
+    useEffect(() => {
+      const currentSentinel = sentinel.current
+
+      const observer = new IntersectionObserver((entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          handleLoadNext()
+        }
+      })
+
+      if (currentSentinel) {
+        observer.observe(currentSentinel)
+      }
+
+      return () => {
+        if (currentSentinel) {
+          observer.unobserve(currentSentinel)
+        }
+      }
+    }, [handleLoadNext])
 
     const handleDeleteSuccess = (deletedTweetId) => {
       setTweetsInit(tweets.filter((tweet) => tweet.id !== deletedTweetId))
@@ -84,6 +107,6 @@ export function TweetFeedList(props) {
         className="my-4 py-2 border bg-white text-dark rounded-pill w-50"
         key={`${index}-{item.id}`}/>
     })}
-    {nextUrl !== null && <button onClick={handleLoadNext} className="btn btn-primary">Next</button>}
+    <div ref={sentinel} />
     </React.Fragment> : <div>Loading...</div>
 }
