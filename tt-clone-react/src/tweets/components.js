@@ -5,6 +5,7 @@ import {TweetSearch} from "./searchbar"
 import {TweetCreate, ReplyCreate} from "./create"
 import {Tweet} from "./detail"
 import {apiTweetDetail, apiRepliesList} from "./lookup"
+import {useCurrentUser} from "../auth/hooks"
 
 export function FeedOrProfileTweetsComponent(props) {
   const [newTweets, setNewTweets] = useState([])
@@ -44,6 +45,8 @@ export function TweetDetailComponent(props) {
   const [didLookup, setDidLookup] = useState(false)
   const [tweet, setTweet] = useState(null)
   const [replies, setReplies] = useState([])
+  const {currentUser, isLoading} = useCurrentUser()
+  const [isTweetDeleted, setIsTweetDeleted] = useState(false)
 
   const handleBackendLookup = (response, status) => {
     if (status === 200) {
@@ -73,15 +76,26 @@ export function TweetDetailComponent(props) {
       apiRepliesList(tweetId, handleBackendRepliesLookup)
       setDidLookup(true)
     }
-  }, [tweetId, didLookup, setDidLookup])
+  }, [tweetId, didLookup, setDidLookup, isTweetDeleted, setIsTweetDeleted])
+
+  const handleDeleteSuccess = (deletedTweetId) => {
+    setIsTweetDeleted(true)
+  }
 
   return tweet === null ? null : (
-    <div className={props.className}>
-      <Tweet tweet={tweet} />
-      <ReplyCreate upperTweetId={tweetId} didReply={handleNewReply} className="col-12 mb-3" />
+    !isLoading ? <div className={props.className}>
+      {!isTweetDeleted ? <Tweet
+        tweet={tweet}
+        currentUser={currentUser}
+        onDeleteSuccess={handleDeleteSuccess}
+        className="my-4 py-2 border bg-white text-dark rounded-pill w-50" /> : <div class="my-4 py-2 border bg-white text-dark rounded-pill w-50">This tweet has been deleted.</div>}
+      <ReplyCreate upperTweetId={tweetId} didReply={handleNewReply} className="col-12 mb-3 w-50" />
       {replies.map((reply, index) => (
-        <Tweet key={index} tweet={reply} />
+        <Tweet
+          key={index}
+          tweet={reply}
+          className="my-4 py-2 border bg-white text-dark rounded-pill w-50" />
       ))}
-    </div>
+    </div> : <div>Loading...</div>
   )
 }
