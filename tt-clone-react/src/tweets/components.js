@@ -78,8 +78,12 @@ export function TweetDetailComponent(props) {
     }
   }, [tweetId, didLookup, setDidLookup, isTweetDeleted, setIsTweetDeleted])
 
-  const handleDeleteSuccess = (deletedTweetId) => {
+  const handleTweetDeleteSuccess = (deletedTweetId) => {
     setIsTweetDeleted(true)
+  }
+
+  const handleReplyDeleteSuccess = (deletedTweetId) => {
+    setReplies(replies.filter((tweet) => tweet.id !== deletedTweetId))
   }
 
   return tweet === null ? null : (
@@ -87,13 +91,15 @@ export function TweetDetailComponent(props) {
       {!isTweetDeleted ? <Tweet
         tweet={tweet}
         currentUser={currentUser}
-        onDeleteSuccess={handleDeleteSuccess}
+        onDeleteSuccess={handleTweetDeleteSuccess}
         className="my-4 py-2 border bg-white text-dark rounded-pill w-50" /> : <div class="my-4 py-2 border bg-white text-dark rounded-pill w-50">This tweet has been deleted.</div>}
       <ReplyCreate upperTweetId={tweetId} didReply={handleNewReply} className="col-12 mb-3 w-50" />
-      {replies.map((reply, index) => (
+      {replies.slice().reverse().map((reply, index) => (
         <Tweet
           key={index}
           tweet={reply}
+          currentUser={currentUser}
+          onDeleteSuccess={handleReplyDeleteSuccess}
           className="my-4 py-2 border bg-white text-dark rounded-pill w-50" />
       ))}
     </div> : <div>Loading...</div>
