@@ -9,7 +9,8 @@ export function ParentTweet(props) {
     return tweet.parent ? <Tweet
                             isRetweet
                             retweeter={props.retweeter}
-                            hideActions className={"my-4 py-2 border bg-white text-dark rounded-pill"}
+                            hideActions
+                            className={"my-4 py-2 border bg-white text-dark rounded-pill"}
                             tweet={tweet.parent}
                             onDeleteSuccess={onDeleteSuccess} /> : null
 }
@@ -48,42 +49,42 @@ export function Tweet(props) {
             <br /><br /><p><UserDisplay includeFullName user={tweet.user} /></p>
           </div>
           <div className="col-8">
-          <Link to={`/${tweet.id}`} className="tweet-wrapper" style={{textDecoration: "none", color: "inherit"}}>
-            <div>
-              <p>{tweet.content}</p>
-              <ParentTweet
-                tweet={tweet}
-                retweeter={tweet.user}
-                onDeleteSuccess={onDeleteSuccess}
-              />
-            </div>
-          </Link>
-          <br />
-          <div className="btn btn-group px-0">
-            {actionTweet && hideActions !== true && (
-              <React.Fragment>
-                <ActionBtn
-                  tweet={actionTweet}
-                  didPerformAction={handlePerformAction}
-                  action={{type: "like", display: "Like"}}
-                />
-                <ActionBtn
-                  tweet={actionTweet}
-                  didPerformAction={handlePerformAction}
-                  action={{type:"unlike", display: "Unlike"}}
-                />
-                <ActionBtn
+            <Link to={`/${tweet.id}`} className="tweet-wrapper" style={{textDecoration: "none", color: "inherit"}}>
+              <div>
+                <p>{tweet.content}</p>
+                <ParentTweet
                   tweet={tweet}
-                  didPerformAction={handlePerformAction}
-                  action={{type:"retweet", display: "Retweet"}}
+                  retweeter={tweet.user}
+                  onDeleteSuccess={onDeleteSuccess}
                 />
-                {currentUser &&
-                  currentUser.username === tweet.user.username && (
-                    <DeleteBtn tweet={tweet} onDelete={handleDelete} />
-                )}
-              </React.Fragment>
-            )}
-          </div>
+              </div>
+            </Link>
+            <br />
+            <div className="btn btn-group px-0">
+              {actionTweet && hideActions !== true && (
+                <React.Fragment>
+                  <ActionBtn
+                    tweet={actionTweet}
+                    didPerformAction={handlePerformAction}
+                    action={{type: "like", display: "Like"}}
+                  />
+                  <ActionBtn
+                    tweet={actionTweet}
+                    didPerformAction={handlePerformAction}
+                    action={{type: "unlike", display: "Unlike"}}
+                  />
+                  <ActionBtn
+                    tweet={tweet}
+                    didPerformAction={handlePerformAction}
+                    action={{type: "retweet", display: "Retweet"}}
+                  />
+                  {currentUser &&
+                    currentUser.username === tweet.user.username && (
+                      <DeleteBtn tweet={tweet} onDelete={handleDelete} />
+                  )}
+                </React.Fragment>
+              )}
+            </div>
           </div>
         </div>
       </div>

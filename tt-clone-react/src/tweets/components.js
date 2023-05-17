@@ -70,12 +70,9 @@ export function TweetDetailComponent(props) {
     setReplies(tempReplies)
   }
 
-  useEffect(()=>{
-    if (didLookup === false) {
-      apiTweetDetail(tweetId, handleBackendLookup)
-      apiRepliesList(tweetId, handleBackendRepliesLookup)
-      setDidLookup(true)
-    }
+  useEffect(() => {
+    apiTweetDetail(tweetId, handleBackendLookup)
+    apiRepliesList(tweetId, handleBackendRepliesLookup)
   }, [tweetId, didLookup, setDidLookup, isTweetDeleted, setIsTweetDeleted])
 
   const handleTweetDeleteSuccess = (deletedTweetId) => {
