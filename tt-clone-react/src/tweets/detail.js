@@ -6,11 +6,16 @@ import {Link} from "react-router-dom"
 
 export function ParentTweet(props) {
     const {tweet, onDeleteSuccess} = props
-    return tweet.parent ? <Tweet isRetweet retweeter={props.retweeter} hideActions className={" "} tweet={tweet.parent} onDeleteSuccess={onDeleteSuccess} /> : null
+    return tweet.parent ? <Tweet
+                            isRetweet
+                            retweeter={props.retweeter}
+                            hideActions className={"my-4 py-2 border bg-white text-dark rounded-pill"}
+                            tweet={tweet.parent}
+                            onDeleteSuccess={onDeleteSuccess} /> : null
 }
 
 export function Tweet(props) {
-    const {tweet, currentUser, didRetweet, hideActions, isRetweet, retweeter, onDeleteSuccess} = props
+    const {tweet, currentUser, didRetweet, hideActions, isRetweet, onDeleteSuccess} = props
     const [actionTweet, setActionTweet] = useState(props.tweet ? props.tweet : null)
     let className = props.className ? props.className : "col-10 mx-auto col-md-6"
     className = isRetweet === true ? `${className} p-2 border rounded` : className
@@ -37,20 +42,13 @@ export function Tweet(props) {
 
     return (
       <div className={className}>
-        {isRetweet === true && (
-          <div className="mb-2">
-            <span className="small text-muted">
-              Retweeted by <UserDisplay user={retweeter} />
-            </span>
-          </div>
-        )}
         <div className="d-flex">
           <div className="col-3 my-auto p-2">
             <UserPicture user={tweet.user} />
             <br /><br /><p><UserDisplay includeFullName user={tweet.user} /></p>
           </div>
           <div className="col-8">
-          <Link to={`/${tweet.id}`} className="tweet-wrapper" style={{ textDecoration: "none", color: "inherit" }}>
+          <Link to={`/${tweet.id}`} className="tweet-wrapper" style={{textDecoration: "none", color: "inherit"}}>
             <div>
               <p>{tweet.content}</p>
               <ParentTweet
@@ -67,17 +65,17 @@ export function Tweet(props) {
                 <ActionBtn
                   tweet={actionTweet}
                   didPerformAction={handlePerformAction}
-                  action={{ type: "like", display: "Like" }}
+                  action={{type: "like", display: "Like"}}
                 />
                 <ActionBtn
                   tweet={actionTweet}
                   didPerformAction={handlePerformAction}
-                  action={{ type: "unlike", display: "Unlike" }}
+                  action={{type:"unlike", display: "Unlike"}}
                 />
                 <ActionBtn
-                  tweet={actionTweet}
+                  tweet={tweet}
                   didPerformAction={handlePerformAction}
-                  action={{ type: "retweet", display: "Retweet" }}
+                  action={{type:"retweet", display: "Retweet"}}
                 />
                 {currentUser &&
                   currentUser.username === tweet.user.username && (

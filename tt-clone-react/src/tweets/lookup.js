@@ -12,8 +12,10 @@ export function apiRepliesList(upperTweetId, callback) {
     backendLookup("GET", `/tweets/${upperTweetId}/replies/`, callback)
 }
 
-export function apiTweetAction(tweetId, action, callback) {
-    const data = {id: tweetId, action: action}
+export function apiTweetAction(tweetId, action, callback, content = "") {
+    const data = content === ""
+        ? {id: tweetId, action: action}
+        : {id: tweetId, action: action, content: content}
     backendLookup("POST", "/tweets/action/", callback, data)
 }
 
