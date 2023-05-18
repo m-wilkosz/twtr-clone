@@ -60,7 +60,7 @@ export function TweetDetailComponent(props) {
     if (status === 200) {
       setReplies(response.results || [])
     } else {
-      alert("There was an error finding replies")
+      alert("There was an error finding replies.")
     }
   }
 
@@ -73,7 +73,7 @@ export function TweetDetailComponent(props) {
   useEffect(() => {
     apiTweetDetail(tweetId, handleBackendLookup)
     apiRepliesList(tweetId, handleBackendRepliesLookup)
-  }, [tweetId, didLookup, setDidLookup, isTweetDeleted, setIsTweetDeleted])
+  }, [tweetId, didLookup, setDidLookup, isTweetDeleted, setIsTweetDeleted, replies])
 
   const handleTweetDeleteSuccess = (deletedTweetId) => {
     setIsTweetDeleted(true)
@@ -89,6 +89,7 @@ export function TweetDetailComponent(props) {
         tweet={tweet}
         currentUser={currentUser}
         onDeleteSuccess={handleTweetDeleteSuccess}
+        repliesCount={replies.length}
         className="my-4 py-2 border bg-white text-dark rounded-pill w-50" /> : <div class="my-4 py-2 border bg-white text-dark rounded-pill w-50">This tweet has been deleted.</div>}
       <ReplyCreate upperTweetId={tweetId} didReply={handleNewReply} className="col-12 mb-3 w-50" />
       {replies.slice().reverse().map((reply, index) => (

@@ -1,8 +1,10 @@
-import React, {useState} from "react"
+import React, {useState, useEffect} from "react"
 import {ActionBtn, DeleteBtn} from "./buttons"
 import {apiTweetDelete} from "./lookup"
 import {UserDisplay, UserPicture} from "../profiles"
 import {Link} from "react-router-dom"
+import {Button} from "react-bootstrap"
+import {apiRepliesList} from "./lookup"
 
 export function ParentTweet(props) {
     const {tweet, onDeleteSuccess} = props
@@ -20,6 +22,7 @@ export function Tweet(props) {
     const [actionTweet, setActionTweet] = useState(props.tweet ? props.tweet : null)
     let className = props.className ? props.className : "col-10 mx-auto col-md-6"
     className = isRetweet === true ? `${className} p-2 border rounded` : className
+    const [repliesCount, setRepliesCount] = useState(props.repliesCount)
 
     const handlePerformAction = (newActionTweet, status) => {
       if (status === 200) {
@@ -40,6 +43,18 @@ export function Tweet(props) {
         }
       })
     }
+
+    const handleBackendRepliesLookup = (response, status) => {
+      if (status === 200) {
+        if (response.results.length !== undefined) {
+          setRepliesCount(response.results.length)
+        }
+      }
+    }
+
+    useEffect(() => {
+      apiRepliesList(tweet.id, handleBackendRepliesLookup)
+    }, [tweet])
 
     return (
       <div className={className}>
@@ -63,6 +78,9 @@ export function Tweet(props) {
             <div className="btn btn-group px-0">
               {actionTweet && hideActions !== true && (
                 <React.Fragment>
+                  <Button variant="primary" className="btn btn-primary rounded-pill mx-1" href={`/${tweet.id}`}>
+                    {repliesCount} <i className="fas fa-comment"></i>
+                  </Button>
                   <ActionBtn
                     tweet={actionTweet}
                     didPerformAction={handlePerformAction}
