@@ -54,7 +54,7 @@ export function Tweet(props) {
 
     useEffect(() => {
       apiRepliesList(tweet.id, handleBackendRepliesLookup)
-    }, [tweet])
+    }, [tweet, props.repliesCount])
 
     return (
       <div className={className}>

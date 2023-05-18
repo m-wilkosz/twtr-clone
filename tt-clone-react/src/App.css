@@ -70,3 +70,10 @@
   margin-left: 250px;
   padding: 20px;
 }
+
+.vertical-line {
+  border-left: 4px solid #DDDDDD;
+  height: 30px;
+  width: 5px;
+  margin-left: 80px;
+}

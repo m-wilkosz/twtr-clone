@@ -4,8 +4,9 @@ import {TweetFeedList} from "./feedlist"
 import {TweetSearch} from "./searchbar"
 import {TweetCreate, ReplyCreate} from "./create"
 import {Tweet} from "./detail"
-import {apiTweetDetail, apiRepliesList} from "./lookup"
+import {apiTweetDetail, apiRepliesList, apiPreviousTweet} from "./lookup"
 import {useCurrentUser} from "../auth/hooks"
+import "../App.css"
 
 export function FeedOrProfileTweetsComponent(props) {
   const [newTweets, setNewTweets] = useState([])
@@ -42,11 +43,12 @@ export function TweetDetailComponentWrapper() {
 
 export function TweetDetailComponent(props) {
   const {tweetId} = props
-  const [didLookup, setDidLookup] = useState(false)
   const [tweet, setTweet] = useState(null)
   const [replies, setReplies] = useState([])
   const {currentUser, isLoading} = useCurrentUser()
   const [isTweetDeleted, setIsTweetDeleted] = useState(false)
+  const [previousTweet, setPreviousTweet] = useState(null)
+  const [repliesCount, setRepliesCount] = useState(0)
 
   const handleBackendLookup = (response, status) => {
     if (status === 200) {
@@ -56,9 +58,22 @@ export function TweetDetailComponent(props) {
     }
   }
 
+  const handlePreviousTweetLookup = (response, status) => {
+    if (status === 200) {
+      if (response.detail !== "This is first tweet in thread.") {
+        setPreviousTweet(response)
+      } else {
+        setPreviousTweet(null)
+      }
+    } else {
+      alert("There was an error finding the previous tweet.")
+    }
+  }
+
   const handleBackendRepliesLookup = (response, status) => {
     if (status === 200) {
       setReplies(response.results || [])
+      setRepliesCount(response.results.length)
     } else {
       alert("There was an error finding replies.")
     }
@@ -68,12 +83,17 @@ export function TweetDetailComponent(props) {
     let tempReplies = [...replies]
     tempReplies.unshift(newReply)
     setReplies(tempReplies)
+    setRepliesCount(repliesCount + 1)
   }
+
+  useEffect(() => {
+    apiPreviousTweet(tweetId, handlePreviousTweetLookup)
+  }, [tweetId])
 
   useEffect(() => {
     apiTweetDetail(tweetId, handleBackendLookup)
     apiRepliesList(tweetId, handleBackendRepliesLookup)
-  }, [tweetId, didLookup, setDidLookup, isTweetDeleted, setIsTweetDeleted, replies])
+  }, [tweetId, isTweetDeleted])
 
   const handleTweetDeleteSuccess = (deletedTweetId) => {
     setIsTweetDeleted(true)
@@ -81,16 +101,21 @@ export function TweetDetailComponent(props) {
 
   const handleReplyDeleteSuccess = (deletedTweetId) => {
     setReplies(replies.filter((tweet) => tweet.id !== deletedTweetId))
+    setRepliesCount(repliesCount - 1)
   }
 
   return tweet === null ? null : (
     !isLoading ? <div className={props.className}>
+      {previousTweet && <Tweet tweet={previousTweet} currentUser={currentUser} className="my-3 py-2 border bg-white text-dark rounded-pill w-50" />}
+      {previousTweet && <div class="d-flex">
+        <div class="vertical-line"></div>
+      </div>}
       {!isTweetDeleted ? <Tweet
         tweet={tweet}
         currentUser={currentUser}
         onDeleteSuccess={handleTweetDeleteSuccess}
-        repliesCount={replies.length}
-        className="my-4 py-2 border bg-white text-dark rounded-pill w-50" /> : <div class="my-4 py-2 border bg-white text-dark rounded-pill w-50">This tweet has been deleted.</div>}
+        repliesCount={repliesCount}
+        className="my-3 py-2 border bg-white text-dark rounded-pill w-50" /> : <div class="my-4 py-2 border bg-white text-dark rounded-pill w-50">This tweet has been deleted.</div>}
       <ReplyCreate upperTweetId={tweetId} didReply={handleNewReply} className="col-12 mb-3 w-50" />
       {replies.slice().reverse().map((reply, index) => (
         <Tweet

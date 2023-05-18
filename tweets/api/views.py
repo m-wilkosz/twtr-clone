@@ -66,6 +66,18 @@ def tweet_feed_view(request, *args, **kwargs):
     return get_paginated_queryset_response(qs, request)
 
 @api_view(["GET"])
+def tweet_previous_view(request, tweet_id, *args, **kwargs):
+    try:
+        tweet = Tweet.objects.get(id=tweet_id)
+    except Tweet.DoesNotExist:
+        return Response({"detail": "Tweet not found."}, status=404)
+    qs = tweet.upper_tweet
+    if qs == None:
+        return Response({"detail": "This is first tweet in thread."}, status=200)
+    serializer = TweetSerializer(qs)
+    return Response(serializer.data)
+
+@api_view(["GET"])
 def tweet_detail_view(request, tweet_id, *args, **kwargs):
     qs = Tweet.objects.filter(id=tweet_id)
     if not qs.exists():
