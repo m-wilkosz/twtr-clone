@@ -20,9 +20,9 @@ export function FeedOrProfileTweetsComponent(props) {
   }
 
   return <div className="container">
-          <TweetSearch setSearchResults={setSearchResults} />
+          {props.isFeed === true && <TweetSearch setSearchResults={setSearchResults} />}
           <div className={props.className}>
-            {canTweet === true && <TweetCreate didTweet={handleNewTweet} className="col-6 mb-3" />}
+            {canTweet === true && props.isFeed === true && <TweetCreate didTweet={handleNewTweet} className="col-6 mb-3" />}
             <TweetFeedList newTweets={newTweets} searchedTweets={searchResults && searchResults.length > 0 ? searchResults : null} isFeed={props.isFeed} {...props} />
           </div>
         </div>
