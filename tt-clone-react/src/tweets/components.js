@@ -106,7 +106,10 @@ export function TweetDetailComponent(props) {
 
   return tweet === null ? null : (
     !isLoading ? <div className={props.className}>
-      {previousTweet && <Tweet tweet={previousTweet} currentUser={currentUser} className="my-3 py-2 border bg-white text-dark rounded-pill w-50" />}
+      {previousTweet && <Tweet
+                          tweet={previousTweet}
+                          currentUser={currentUser}
+                          className="my-3 py-2 border bg-white text-dark rounded-pill w-50" />}
       {previousTweet && <div class="d-flex">
         <div class="vertical-line"></div>
       </div>}
@@ -115,7 +118,8 @@ export function TweetDetailComponent(props) {
         currentUser={currentUser}
         onDeleteSuccess={handleTweetDeleteSuccess}
         repliesCount={repliesCount}
-        className="my-3 py-2 border bg-white text-dark rounded-pill w-50" /> : <div class="my-4 py-2 border bg-white text-dark rounded-pill w-50">This tweet has been deleted.</div>}
+        className="my-3 py-2 border bg-white text-dark rounded-pill w-50" />
+        : <div class="my-4 py-2 border bg-white text-dark rounded-pill w-50">This tweet has been deleted.</div>}
       <ReplyCreate upperTweetId={tweetId} didReply={handleNewReply} className="col-12 mb-3 w-50" />
       {replies.slice().reverse().map((reply, index) => (
         <Tweet

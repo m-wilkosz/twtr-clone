@@ -4,9 +4,13 @@ import {ProfileTweetsComponent} from "../tweets/components"
 
 export function ProfileComponent({currentUser}) {
     return (
-        <div>
-            {currentUser && <div><ProfileBadgeComponent username={currentUser.username} /></div>}
-            {currentUser && <div><ProfileTweetsComponent username={currentUser.username} /></div>}
+        <div className="mt-4">
+            {currentUser && <div style={{display: "flex", justifyContent: "flex-start", marginLeft: "250px"}}>
+                                <ProfileBadgeComponent username={currentUser.username} />
+                            </div>}
+            {currentUser && <div>
+                                <ProfileTweetsComponent username={currentUser.username} />
+                            </div>}
         </div>
     )
 }
