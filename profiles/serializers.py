@@ -8,10 +8,11 @@ class PublicProfileSerializer(serializers.ModelSerializer):
     username = serializers.SerializerMethodField(read_only=True)
     followers_count = serializers.SerializerMethodField(read_only=True)
     following_count = serializers.SerializerMethodField(read_only=True)
+    timestamp = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = Profile
-        fields = ["first_name", "last_name", "id", "bio", "location", "followers_count", "following_count", "is_following", "username"]
+        fields = ["first_name", "last_name", "id", "bio", "location", "followers_count", "following_count", "is_following", "username", "timestamp"]
 
     def get_is_following(self, obj):
         is_following = False
@@ -36,3 +37,6 @@ class PublicProfileSerializer(serializers.ModelSerializer):
 
     def get_followers_count(self, obj):
         return obj.followers.count()
+
+    def get_timestamp(self, obj):
+        return obj.timestamp

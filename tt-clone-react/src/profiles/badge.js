@@ -1,10 +1,11 @@
 import React, {useState, useEffect} from "react"
+import {useParams} from "react-router-dom"
 import {apiProfileDetail, apiProfileFollowToggle} from "./lookup"
 import {UserDisplay, UserPicture} from "./components"
 import {DisplayCount} from "./utils"
 
 function ProfileBadge(props) {
-    const {user, didFollowToggle, profileLoading} = props
+    const {user, didFollowToggle, profileLoading, currentUserUsername} = props
     let currentVerb = (user && user.is_following) ? "Unfollow" : "Follow"
     currentVerb = profileLoading ? "Loading..." : currentVerb
     const handleFollowToggle = (event) => {
@@ -13,19 +14,36 @@ function ProfileBadge(props) {
             didFollowToggle(currentVerb)
         }
     }
-    return user ? <div>
-            <UserPicture user={user} hideLink />
-            <br/><br/><p><UserDisplay user={user} includeFullName hideLink /></p>
-            <p><DisplayCount>{user.followers_count}</DisplayCount> {user.followers_count === 1 ? "follower" : "followers"}
-                &ensp;&ensp;<DisplayCount>{user.following_count}</DisplayCount> following</p>
-            <p>{user.location}</p>
-            <p>{user.bio}</p>
-            <button className="btn btn-primary" onClick={handleFollowToggle}>{currentVerb}</button>
-        </div> : null
+
+    return user
+            ? <div style={{marginLeft: "60px", marginRight: "100px"}}>
+                <div style={{marginLeft: "60px", display: "flex", justifyContent: "space-between", alignItems: "center"}}>
+                    <UserPicture user={user} hideLink />
+                    {user.username !== currentUserUsername
+                        ? <button className="btn btn-primary rounded-pill" onClick={handleFollowToggle}>{currentVerb}</button>
+                        : null}
+                </div>
+                <br/><br/>
+                <p align="left"><UserDisplay user={user} includeFullName hideLink /></p>
+                <p align="left" style={{width: "500px"}}>{user.bio}</p>
+                <p align="left">
+                    <i class="fa fa-map-marker-alt"></i>&ensp;{user.location}
+                    &ensp;&ensp;
+                    <i class="fa fa-calendar-alt"></i>&ensp;Joined&ensp;
+                                    {new Intl.DateTimeFormat("en-US", {month: "long", year: "numeric"}).format(new Date(user.timestamp))}</p>
+                <p style={{display: "flex", alignItems: "center"}}>
+                    <DisplayCount>{user.followers_count}</DisplayCount>&nbsp;{user.followers_count === 1 ? "follower" : "followers"}
+                    &ensp;&ensp;
+                    <DisplayCount>{user.following_count}</DisplayCount>&nbsp;following
+                </p>
+            </div>
+            : null
 }
 
 export function ProfileBadgeComponent(props) {
-    const {username} = props
+    const param = useParams()
+    const username = param.username
+    const {currentUserUsername} = props
     const [didLookup, setDidLookup] = useState(false)
     const [profile, setProfile] = useState(null)
     const [profileLoading, setProfileLoading] = useState(false)
@@ -49,5 +67,9 @@ export function ProfileBadgeComponent(props) {
         })
         setProfileLoading(true)
     }
-    return didLookup === false ? "Loading..." : profile ? <ProfileBadge user={profile} didFollowToggle={handleNewFollow} profileLoading={profileLoading} /> : null
+    return didLookup === false ? "Loading..." : profile ? <ProfileBadge
+                                                                user={profile}
+                                                                currentUserUsername={currentUserUsername}
+                                                                didFollowToggle={handleNewFollow}
+                                                                profileLoading={profileLoading} /> : null
 }
