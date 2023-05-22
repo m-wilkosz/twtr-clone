@@ -2,6 +2,7 @@ import React, {useEffect, useState, useCallback} from "react"
 import {apiTweetList, apiTweetFeed} from "./lookup"
 import {Tweet} from "./detail"
 import {useCurrentUser} from "../auth/hooks"
+import {useParams} from "react-router-dom"
 
 export function TweetFeedList(props) {
     const [tweetsInit, setTweetsInit] = useState([])
@@ -10,6 +11,7 @@ export function TweetFeedList(props) {
     const [tweetsDidSet, setTweetsDidSet] = useState(false)
     const {currentUser, isLoading} = useCurrentUser()
     const sentinel = React.useRef()
+    const profileUser = useParams()
 
     useEffect(() => {
       if (props.searchedTweets === null) {
@@ -36,18 +38,20 @@ export function TweetFeedList(props) {
         if (props.isFeed) {
           apiTweetFeed(handleTweetListLookup)
         } else {
-          apiTweetList(props.username, handleTweetListLookup)
+          apiTweetList(profileUser.username, handleTweetListLookup)
         }
       }
-    }, [tweetsInit, tweetsDidSet, setTweetsDidSet, props.username, props.isFeed])
+    }, [tweetsInit, tweetsDidSet, setTweetsDidSet, profileUser.username, props.isFeed])
 
     const handleDidRetweet = (newTweet) => {
-      const updateTweetsInit = [...tweetsInit]
-      updateTweetsInit.unshift(newTweet)
-      setTweetsInit(updateTweetsInit)
-      const updateFinalTweets = [...tweets]
-      updateFinalTweets.unshift(newTweet)
-      setTweets(updateFinalTweets)
+      if (!(props.isFeed === false && currentUser !== profileUser)) {
+        const updateTweetsInit = [...tweetsInit]
+        updateTweetsInit.unshift(newTweet)
+        setTweetsInit(updateTweetsInit)
+        const updateFinalTweets = [...tweets]
+        updateFinalTweets.unshift(newTweet)
+        setTweets(updateFinalTweets)
+      }
     }
 
     const handleLoadNext = useCallback((event) => {
@@ -68,10 +72,10 @@ export function TweetFeedList(props) {
         if (props.isFeed) {
           apiTweetFeed(handleLoadNextResponse, nextUrl)
         } else {
-          apiTweetList(props.username, handleLoadNextResponse, nextUrl)
+          apiTweetList(profileUser.username, handleLoadNextResponse, nextUrl)
         }
       }
-    }, [tweets, nextUrl, props.isFeed, props.username])
+    }, [tweets, nextUrl, props.isFeed, profileUser.username])
 
     useEffect(() => {
       const currentSentinel = sentinel.current
