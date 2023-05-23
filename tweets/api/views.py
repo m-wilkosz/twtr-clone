@@ -6,6 +6,8 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from ..models import Tweet
 from ..serializers import TweetSerializer, TweetActionSerializer, TweetCreateSerializer
+from django.contrib.auth import get_user_model
+User = get_user_model()
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
@@ -64,6 +66,12 @@ def tweet_feed_view(request, *args, **kwargs):
     user = request.user
     qs = Tweet.objects.feed(user).filter(is_reply=False)
     return get_paginated_queryset_response(qs, request)
+
+@api_view(["GET"])
+def tweets_liked_by_user_view(request, *args, **kwargs):
+    user = request.user
+    liked_tweets = user.tweet_user.all()
+    return get_paginated_queryset_response(liked_tweets, request)
 
 @api_view(["GET"])
 def tweet_previous_view(request, tweet_id, *args, **kwargs):
