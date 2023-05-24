@@ -34,6 +34,7 @@ export function UserPicture(props) {
 export function ProfileLikesComponent(props) {
   const [tweets, setTweets] = useState([])
   const [nextUrl, setNextUrl] = useState(null)
+  const [tweetUnliked, setTweetUnliked] = useState(false)
   const {currentUser, isLoading} = useCurrentUser()
   const sentinel = React.useRef()
   const param = useParams()
@@ -49,7 +50,7 @@ export function ProfileLikesComponent(props) {
       }
     }
     apiProfileLikes(username, handleProfileLikesLookup)
-  }, [username])
+  }, [username, tweetUnliked])
 
   const handleLoadNext = useCallback((event) => {
     if (event) {
@@ -86,10 +87,15 @@ export function ProfileLikesComponent(props) {
     }
   }, [handleLoadNext])
 
+  const handleUnliked = (newActionTweet) => {
+    setTweetUnliked(!tweetUnliked)
+  }
+
   return !isLoading ? <React.Fragment>{tweets.map((item, index) => {
     return <Tweet
       tweet={item}
       currentUser={currentUser}
+      unliked={handleUnliked}
       className="my-4 py-2 border bg-white text-dark rounded-pill w-50"
       key={`${index}-${item.id}`}/>
   })}

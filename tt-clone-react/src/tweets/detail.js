@@ -18,7 +18,7 @@ export function ParentTweet(props) {
 }
 
 export function Tweet(props) {
-    const {tweet, currentUser, didRetweet, hideActions, isRetweet, onDeleteSuccess} = props
+    const {tweet, currentUser, didRetweet, hideActions, isRetweet, onDeleteSuccess, unliked} = props
     const [actionTweet, setActionTweet] = useState(props.tweet ? props.tweet : null)
     let className = props.className ? props.className : "col-10 mx-auto col-md-6"
     className = isRetweet === true ? `${className} p-2 border rounded` : className
@@ -27,6 +27,9 @@ export function Tweet(props) {
     const handlePerformAction = (newActionTweet, status) => {
       if (status === 200) {
         setActionTweet(newActionTweet)
+        if (unliked !== undefined) {
+          unliked(newActionTweet)
+        }
       } else if (status === 201) {
         if (didRetweet) {
           didRetweet(newActionTweet)
