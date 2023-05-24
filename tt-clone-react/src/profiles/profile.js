@@ -25,8 +25,10 @@ export function ProfileComponent({currentUser}) {
                 </div>}
             {currentUser &&
                 <div>
-                    <button onClick={() => setSelectedTab("tweets")}>Tweets</button>
-                    <button onClick={() => setSelectedTab("likes")}>Likes</button>
+                    <div className="d-flex justify-content-between border rounded-pill w-25 my-3" style={{marginLeft: "150px"}}>
+                        <button className="btn btn-primary rounded-pill" onClick={() => setSelectedTab("tweets")}>Tweets</button>
+                        <button className="btn btn-primary rounded-pill" onClick={() => setSelectedTab("likes")}>Likes</button>
+                    </div>
                     {renderTabContent()}
                 </div>}
         </div>
