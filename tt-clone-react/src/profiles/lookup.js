@@ -10,10 +10,9 @@ export function apiProfileFollowToggle(username, action, callback) {
 }
 
 export function apiProfileLikes(username, callback, nextUrl) {
-    const data = {profileUsername: username}
-    let endpoint = "/tweets/likes"
-    if (nextUrl !== null &&  nextUrl !== undefined) {
+    let endpoint = `/tweets/likes?username=${encodeURIComponent(username)}`
+    if (nextUrl !== null && nextUrl !== undefined) {
         endpoint = nextUrl.replace("http://localhost:8000/api", "")
     }
-    backendLookup("GET", endpoint, callback, data)
+    backendLookup("GET", endpoint, callback)
 }

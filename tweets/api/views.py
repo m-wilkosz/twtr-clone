@@ -63,13 +63,17 @@ def get_paginated_queryset_response(qs, request):
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def tweet_feed_view(request, *args, **kwargs):
-    user = request.profileUsername
+    user = request.user
     qs = Tweet.objects.feed(user).filter(is_reply=False)
     return get_paginated_queryset_response(qs, request)
 
 @api_view(["GET"])
 def tweets_liked_by_user_view(request, *args, **kwargs):
-    user = request.user
+    try:
+        username = request.GET.get("username", None)
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return Response({"error": "User not found"}, status=404)
     liked_tweets = user.tweet_user.all()
     return get_paginated_queryset_response(liked_tweets, request)
 
