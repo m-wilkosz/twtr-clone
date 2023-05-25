@@ -16,3 +16,11 @@ export function apiProfileLikes(username, callback, nextUrl) {
     }
     backendLookup("GET", endpoint, callback)
 }
+
+export function apiProfileReplies(username, callback, nextUrl) {
+    let endpoint = `/tweets/replies?username=${encodeURIComponent(username)}`
+    if (nextUrl !== null && nextUrl !== undefined) {
+        endpoint = nextUrl.replace("http://localhost:8000/api", "")
+    }
+    backendLookup("GET", endpoint, callback)
+}

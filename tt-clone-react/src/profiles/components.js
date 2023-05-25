@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback} from "react"
-import {apiProfileLikes} from "./lookup"
+import {apiProfileLikes, apiProfileReplies} from "./lookup"
 import {Tweet} from "../tweets/detail"
 import {useCurrentUser} from "../auth/hooks"
 import {useParams} from "react-router-dom"
@@ -31,17 +31,18 @@ export function UserPicture(props) {
   return hideLink === true ? userIdSpan : <UserLink username={user.username}>{userIdSpan}</UserLink>
 }
 
-export function ProfileLikesComponent(props) {
+export function ProfileRepliesOrLikesComponent(props) {
   const [tweets, setTweets] = useState([])
   const [nextUrl, setNextUrl] = useState(null)
   const [tweetUnliked, setTweetUnliked] = useState(false)
+  const areReplies = props.areReplies
   const {currentUser, isLoading} = useCurrentUser()
   const sentinel = React.useRef()
   const param = useParams()
   const username = param.username
 
   useEffect(() => {
-    const handleProfileLikesLookup = (response, status) => {
+    const handleProfileLookup = (response, status) => {
       if (status === 200) {
         setNextUrl(response.next)
         setTweets(response.results)
@@ -49,8 +50,8 @@ export function ProfileLikesComponent(props) {
         alert("There was an error.")
       }
     }
-    apiProfileLikes(username, handleProfileLikesLookup)
-  }, [username, tweetUnliked])
+    areReplies ? apiProfileReplies(username, handleProfileLookup) : apiProfileLikes(username, handleProfileLookup)
+  }, [username, tweetUnliked, areReplies])
 
   const handleLoadNext = useCallback((event) => {
     if (event) {
@@ -66,9 +67,9 @@ export function ProfileLikesComponent(props) {
           alert("There was an error.")
         }
       }
-      apiProfileLikes(username, handleLoadNextResponse, nextUrl)
+      areReplies ? apiProfileReplies(username, handleLoadNextResponse) : apiProfileLikes(username, handleLoadNextResponse)
     }
-  }, [tweets, nextUrl, username])
+  }, [tweets, nextUrl, username, areReplies])
 
   useEffect(() => {
     const currentSentinel = sentinel.current

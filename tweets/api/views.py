@@ -57,10 +57,12 @@ def replies_by_user_view(request, *args, **kwargs):
 
 @api_view(["GET"])
 def tweet_list_view(request, *args, **kwargs):
-    qs = Tweet.objects.all()
-    username = request.GET.get("username")
-    if username != None:
-        qs = qs.by_username(username)
+    try:
+        username = request.GET.get("username", None)
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return Response({"error": "User not found."}, status=404)
+    qs = Tweet.objects.filter(user=user, is_reply=False)
     return get_paginated_queryset_response(qs, request)
 
 def get_paginated_queryset_response(qs, request):
