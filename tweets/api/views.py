@@ -46,6 +46,16 @@ def tweet_replies_list_view(request, tweet_id, *args, **kwargs):
     return get_paginated_queryset_response(qs, request)
 
 @api_view(["GET"])
+def replies_by_user_view(request, *args, **kwargs):
+    try:
+        username = request.GET.get("username", None)
+        user = User.objects.get(username=username)
+    except User.DoesNotExist:
+        return Response({"error": "User not found."}, status=404)
+    qs = Tweet.objects.filter(user=user, is_reply=True)
+    return get_paginated_queryset_response(qs, request)
+
+@api_view(["GET"])
 def tweet_list_view(request, *args, **kwargs):
     qs = Tweet.objects.all()
     username = request.GET.get("username")
@@ -73,7 +83,7 @@ def tweets_liked_by_user_view(request, *args, **kwargs):
         username = request.GET.get("username", None)
         user = User.objects.get(username=username)
     except User.DoesNotExist:
-        return Response({"error": "User not found"}, status=404)
+        return Response({"error": "User not found."}, status=404)
     liked_tweets = user.tweet_user.all()
     return get_paginated_queryset_response(liked_tweets, request)
 

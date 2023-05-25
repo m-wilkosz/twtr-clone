@@ -11,7 +11,8 @@ from .views import (
         tweet_reply_create_view,
         tweet_replies_list_view,
         tweet_previous_view,
-        tweets_liked_by_user_view
+        tweets_liked_by_user_view,
+        replies_by_user_view
     )
 
 urlpatterns = [
@@ -25,5 +26,6 @@ urlpatterns = [
     path("<int:tweet_id>/reply/", tweet_reply_create_view),
     path("<int:tweet_id>/replies/", tweet_replies_list_view),
     path("<int:tweet_id>/previous/", tweet_previous_view),
-    path("likes/", tweets_liked_by_user_view)
+    path("likes/", tweets_liked_by_user_view),
+    path("replies/", replies_by_user_view)
 ]
