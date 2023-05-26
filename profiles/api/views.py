@@ -28,3 +28,23 @@ def profile_detail_api_view(request, username, *args, **kwargs):
                 pass
     serializer = PublicProfileSerializer(instance=profile_obj, context={"request": request})
     return Response(serializer.data, status=200)
+
+@api_view(["GET"])
+def profile_followers_list_view(request, username, *args, **kwargs):
+    qs = Profile.objects.filter(user__username=username)
+    if not qs.exists():
+        return Response({"detail": "User not found."}, status=404)
+    profile_obj = qs.first()
+    followers_qs = Profile.objects.filter(user__in=profile_obj.followers.all())
+    serializer = PublicProfileSerializer(followers_qs, many=True, context={"request": request})
+    return Response(serializer.data, status=200)
+
+@api_view(["GET"])
+def profile_following_list_view(request, username, *args, **kwargs):
+    qs = Profile.objects.filter(user__username=username)
+    if not qs.exists():
+        return Response({"detail": "User not found."}, status=404)
+    profile_obj = qs.first()
+    following_qs = Profile.objects.filter(user__in=profile_obj.user.following.all().values_list("user", flat=True))
+    serializer = PublicProfileSerializer(following_qs, many=True, context={"request": request})
+    return Response(serializer.data, status=200)
