@@ -5,6 +5,7 @@ import SidebarComponent from "./sidebar/sidebar"
 import {useCurrentUser} from "./auth/hooks"
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom"
 import {ProfileComponent} from "./profiles"
+import {FollowListComponent} from "./profiles"
 
 function App() {
   const {currentUser, isLoading} = useCurrentUser()
@@ -22,6 +23,14 @@ function App() {
               <Route
                 path="/:tweetId"
                 element={<TweetDetailComponentWrapper />}
+              />
+              <Route
+                path="/profiles/:username/followers"
+                element={<FollowListComponent currentUser={currentUser} followers={true} />}
+              />
+              <Route
+                path="/profiles/:username/following"
+                element={<FollowListComponent currentUser={currentUser} followers={false} />}
               />
               <Route
                 path="/profiles/:username"

@@ -24,3 +24,19 @@ export function apiProfileReplies(username, callback, nextUrl) {
     }
     backendLookup("GET", endpoint, callback)
 }
+
+export function apiProfileFollowers(username, callback, nextUrl) {
+    let endpoint = `/profiles/${encodeURIComponent(username)}/followers`
+    if (nextUrl !== null && nextUrl !== undefined) {
+        endpoint = nextUrl.replace("http://localhost:8000/api", "")
+    }
+    backendLookup("GET", endpoint, callback)
+}
+
+export function apiProfileFollowing(username, callback, nextUrl) {
+    let endpoint = `/profiles/${encodeURIComponent(username)}/following`
+    if (nextUrl !== null && nextUrl !== undefined) {
+        endpoint = nextUrl.replace("http://localhost:8000/api", "")
+    }
+    backendLookup("GET", endpoint, callback)
+}
