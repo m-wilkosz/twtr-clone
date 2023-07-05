@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useCallback} from "react"
-import {apiProfileFollowers, apiProfileFollowing} from "./lookup"
+import {apiProfileFollowers, apiProfileFollowing, apiProfileFollowToggle} from "./lookup"
 import {useParams} from "react-router-dom"
 import {UserPicture, UserDisplay} from "./components"
 
@@ -72,10 +72,12 @@ export function FollowListComponent(props) {
         }
       }, [handleLoadNext])
 
-      const handleUnfollowToggle = (event) => {
-        if (event) {
-            event.preventDefault()
-        }
+      const handleUnfollowToggle = (userToUnfollow) => {
+        apiProfileFollowToggle(userToUnfollow.username, "unfollow", (response, status) => {
+          if (status === 200) {
+            setFollowList(followList.filter((follower) => follower.username !== userToUnfollow.username))
+          }
+        })
       }
 
       return <React.Fragment>{followList.map((item, index) => {
@@ -85,7 +87,7 @@ export function FollowListComponent(props) {
                     {profileUser === currentUser.username && followers === false ? <button
                         className="btn btn-primary rounded-pill"
                         style={{marginLeft: "300px"}}
-                        onClick={() => handleUnfollowToggle}>
+                        onClick={() => handleUnfollowToggle(item)}>
                         Unfollow
                     </button> : null}
                 </div>
