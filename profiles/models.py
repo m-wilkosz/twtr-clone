@@ -16,6 +16,7 @@ class Profile(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
     followers = models.ManyToManyField(User, related_name="following", blank=True)
+    bookmarks = models.ManyToManyField("tweets.Tweet", blank=True, related_name="bookmarked_by")
 
 def user_did_save(sender, instance, created, *args, **kwargs):
     if created:
