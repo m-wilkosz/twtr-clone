@@ -9,6 +9,7 @@ function ProfileBadge(props) {
     const {user, didFollowToggle, profileLoading, currentUserUsername} = props
     let currentVerb = (user && user.is_following) ? "Unfollow" : "Follow"
     currentVerb = profileLoading ? "Loading..." : currentVerb
+
     const handleFollowToggle = (event) => {
         event.preventDefault()
         if (didFollowToggle && !profileLoading) {
@@ -52,17 +53,20 @@ export function ProfileBadgeComponent(props) {
     const [didLookup, setDidLookup] = useState(false)
     const [profile, setProfile] = useState(null)
     const [profileLoading, setProfileLoading] = useState(false)
+
     const handleBackendLookup = (response, status) => {
         if (status === 200) {
             setProfile(response)
         }
     }
+
     useEffect(()=>{
         if (didLookup === false) {
             apiProfileDetail(username, handleBackendLookup)
             setDidLookup(true)
         }
     }, [username, didLookup, setDidLookup])
+
     const handleNewFollow = (actionVerb) => {
         apiProfileFollowToggle(username, actionVerb, (response, status) => {
             if (status === 200) {
@@ -72,6 +76,7 @@ export function ProfileBadgeComponent(props) {
         })
         setProfileLoading(true)
     }
+
     return didLookup === false ? "Loading..." : profile ? <ProfileBadge
                                                                 user={profile}
                                                                 currentUserUsername={currentUserUsername}
