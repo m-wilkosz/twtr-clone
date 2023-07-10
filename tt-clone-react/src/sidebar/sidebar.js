@@ -11,7 +11,7 @@ const SidebarComponent = ({currentUser}) => {
         <li>Explore</li>
         <li>Notifications</li>
         <li>Messages</li>
-        <li>Bookmarks</li>
+        <li><Link to={"/bookmarks"} style={{textDecoration: "none", color: "inherit"}}>Bookmarks</Link></li>
         {currentUser && <li><Link to={`/profiles/${currentUser.username}`} style={{textDecoration: "none", color: "inherit"}}>Profile</Link></li>}
         <li>Settings</li>
       </ul>

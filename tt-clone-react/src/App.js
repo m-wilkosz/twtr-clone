@@ -6,6 +6,7 @@ import {useCurrentUser} from "./auth/hooks"
 import {BrowserRouter as Router, Route, Routes} from "react-router-dom"
 import {ProfileComponent} from "./profiles"
 import {FollowListComponent} from "./profiles"
+import {BookmarksComponent} from "./sidebar/bookmarks"
 
 function App() {
   const {currentUser, isLoading} = useCurrentUser()
@@ -35,6 +36,10 @@ function App() {
               <Route
                 path="/profiles/:username"
                 element={<ProfileComponent currentUser={currentUser} />}
+              />
+              <Route
+                path="/bookmarks"
+                element={<BookmarksComponent currentUser={currentUser} />}
               />
               <Route
                 exact

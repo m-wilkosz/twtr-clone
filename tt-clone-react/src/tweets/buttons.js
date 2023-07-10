@@ -1,6 +1,7 @@
 import React, {useState} from "react"
-import {Modal, Button, Form} from "react-bootstrap"
+import {Modal, Button, Form, Toast} from "react-bootstrap"
 import {apiTweetAction} from "./lookup"
+import {apiProfileAddOrRemoveBookmark} from "../sidebar/lookup"
 
 export function ActionBtn(props) {
     const {tweet, action, didPerformAction} = props
@@ -85,4 +86,40 @@ export function DeleteBtn(props) {
   return <button className="btn btn-danger btn-sm rounded-pill me-1" onClick={handleDelete}>
     <i className="fas fa-trash"></i>
     </button>
+}
+
+export function AddOrRemoveBookmarkBtn(props) {
+  const {tweet, currentUser} = props
+  const className = props.className ? props.className : "btn btn-primary btn-sm rounded-pill me-1"
+  const [showToast, setShowToast] = useState(false)
+  const [toastMessage, setToastMessage] = useState("")
+
+  const handleActionBackendEvent = (response, status) => {
+    if (status === 201) {
+      setToastMessage("Tweet added to bookmarks")
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 2000)
+    } else if (status === 204) {
+      setToastMessage("Tweet removed from bookmarks")
+      setShowToast(true)
+      setTimeout(() => setShowToast(false), 2000)
+    }
+  }
+
+  const handleClick = (event) => {
+    event.preventDefault()
+    apiProfileAddOrRemoveBookmark(currentUser.username, tweet.id, handleActionBackendEvent)
+  }
+
+  return (
+    <React.Fragment>
+      <button className={className} onClick={handleClick}>
+        <i className="fas fa-bookmark"></i>
+      </button>
+
+      <Toast style={{borderRadius: "25px", height:"50px"}} onClose={() => setShowToast(false)} show={showToast} delay={2000} autohide>
+        <Toast.Body>{toastMessage}</Toast.Body>
+      </Toast>
+    </React.Fragment>
+  )
 }

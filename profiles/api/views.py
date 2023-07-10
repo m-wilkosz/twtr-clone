@@ -72,27 +72,20 @@ def profile_bookmarks_list_view(request, username, *args, **kwargs):
     return paginator.get_paginated_response(serializer.data)
 
 @api_view(["POST"])
-def profile_add_bookmark_view(request, username, tweet_id, *args, **kwargs):
+def profile_add_or_remove_bookmark_view(request, username, tweet_id, *args, **kwargs):
     qs = Profile.objects.filter(user__username=username)
     if not qs.exists():
         return Response({"detail": "User not found."}, status=404)
     profile_obj = qs.first()
-    try:
-        tweet = Tweet.objects.get(id=tweet_id)
-    except Tweet.DoesNotExist:
-        return Response({"detail": "Tweet not found."}, status=404)
-    profile_obj.bookmarks.add(tweet)
-    return Response({"detail": "Tweet added to bookmarks."}, status=status.HTTP_201_CREATED)
 
-@api_view(["POST"])
-def profile_remove_bookmark_view(request, username, tweet_id, *args, **kwargs):
-    qs = Profile.objects.filter(user__username=username)
-    if not qs.exists():
-        return Response({"detail": "User not found."}, status=404)
-    profile_obj = qs.first()
     try:
         tweet = Tweet.objects.get(id=tweet_id)
     except Tweet.DoesNotExist:
         return Response({"detail": "Tweet not found."}, status=404)
-    profile_obj.bookmarks.remove(tweet)
-    return Response({"detail": "Tweet removed from bookmarks."}, status=status.HTTP_204_NO_CONTENT)
+
+    if profile_obj.bookmarks.filter(id=tweet_id).exists():
+        profile_obj.bookmarks.remove(tweet)
+        return Response({"detail": "Tweet removed from bookmarks."}, status=status.HTTP_204_NO_CONTENT)
+    else:
+        profile_obj.bookmarks.add(tweet)
+        return Response({"detail": "Tweet added to bookmarks."}, status=status.HTTP_201_CREATED)

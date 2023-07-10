@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from "react"
-import {ActionBtn, DeleteBtn} from "./buttons"
+import {ActionBtn, DeleteBtn, AddOrRemoveBookmarkBtn} from "./buttons"
 import {apiTweetDelete} from "./lookup"
 import {UserDisplay, UserPicture} from "../profiles"
 import {Link} from "react-router-dom"
@@ -103,6 +103,10 @@ export function Tweet(props) {
                     currentUser.username === tweet.user.username && (
                       <DeleteBtn tweet={tweet} onDelete={handleDelete} />
                   )}
+                  <AddOrRemoveBookmarkBtn
+                    tweet={tweet}
+                    currentUser={currentUser}
+                  ></AddOrRemoveBookmarkBtn>
                 </React.Fragment>
               )}
             </div>
