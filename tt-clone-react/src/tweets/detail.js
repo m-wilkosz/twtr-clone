@@ -18,7 +18,7 @@ export function ParentTweet(props) {
 }
 
 export function Tweet(props) {
-    const {tweet, currentUser, didRetweet, hideActions, isRetweet, onDeleteSuccess, unliked} = props
+    const {tweet, currentUser, didRetweet, hideActions, isRetweet, onDeleteSuccess, unliked, didBookmarkRemoved} = props
     const [actionTweet, setActionTweet] = useState(props.tweet ? props.tweet : null)
     let className = props.className ? props.className : "col-10 mx-auto col-md-6"
     className = isRetweet === true ? `${className} p-2 border rounded` : className
@@ -45,6 +45,10 @@ export function Tweet(props) {
           console.log(response)
         }
       })
+    }
+
+    const handleBookmarkRemoved = (tweetId) => {
+      didBookmarkRemoved(tweetId)
     }
 
     const handleBackendRepliesLookup = (response, status) => {
@@ -106,6 +110,7 @@ export function Tweet(props) {
                   <AddOrRemoveBookmarkBtn
                     tweet={tweet}
                     currentUser={currentUser}
+                    didBookmarkRemoved={handleBookmarkRemoved}
                   ></AddOrRemoveBookmarkBtn>
                 </React.Fragment>
               )}

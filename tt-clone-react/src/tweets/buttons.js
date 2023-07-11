@@ -89,7 +89,7 @@ export function DeleteBtn(props) {
 }
 
 export function AddOrRemoveBookmarkBtn(props) {
-  const {tweet, currentUser} = props
+  const {tweet, currentUser, didBookmarkRemoved} = props
   const className = props.className ? props.className : "btn btn-primary btn-sm rounded-pill me-1"
   const [showToast, setShowToast] = useState(false)
   const [toastMessage, setToastMessage] = useState("")
@@ -100,6 +100,7 @@ export function AddOrRemoveBookmarkBtn(props) {
       setShowToast(true)
       setTimeout(() => setShowToast(false), 2000)
     } else if (status === 204) {
+      didBookmarkRemoved(tweet.id)
       setToastMessage("Tweet removed from bookmarks")
       setShowToast(true)
       setTimeout(() => setShowToast(false), 2000)
