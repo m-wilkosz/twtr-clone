@@ -13,7 +13,7 @@ const SidebarComponent = ({currentUser}) => {
         <li>Messages</li>
         <li><Link to={"/bookmarks"} style={{textDecoration: "none", color: "inherit"}}>Bookmarks</Link></li>
         {currentUser && <li><Link to={`/profiles/${currentUser.username}`} style={{textDecoration: "none", color: "inherit"}}>Profile</Link></li>}
-        <li>Settings</li>
+        <li>Logout</li>
       </ul>
     </div>
   )

@@ -100,10 +100,10 @@ export function AddOrRemoveBookmarkBtn(props) {
       setShowToast(true)
       setTimeout(() => setShowToast(false), 2000)
     } else if (status === 204) {
-      didBookmarkRemoved(tweet.id)
       setToastMessage("Tweet removed from bookmarks")
       setShowToast(true)
       setTimeout(() => setShowToast(false), 2000)
+      didBookmarkRemoved(tweet.id)
     }
   }
 
@@ -118,7 +118,12 @@ export function AddOrRemoveBookmarkBtn(props) {
         <i className="fas fa-bookmark"></i>
       </button>
 
-      <Toast style={{borderRadius: "25px", height:"50px"}} onClose={() => setShowToast(false)} show={showToast} delay={2000} autohide>
+      <Toast
+        style={{borderRadius:"25px", borderColor:"white", height:"50px", backgroundColor:"#282828", color: "white"}}
+        onClose={() => setShowToast(false)}
+        show={showToast}
+        delay={2000}
+        autohide>
         <Toast.Body>{toastMessage}</Toast.Body>
       </Toast>
     </React.Fragment>

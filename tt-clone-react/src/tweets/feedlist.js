@@ -108,7 +108,7 @@ export function TweetFeedList(props) {
         currentUser={currentUser}
         didRetweet={handleDidRetweet}
         onDeleteSuccess={handleDeleteSuccess}
-        className="my-4 py-2 border bg-white text-dark rounded-pill w-50"
+        className="my-4 py-2 border bg-dark text-white rounded-pill w-50"
         key={`${index}-{item.id}`}/>
     })}
     <div ref={sentinel} />

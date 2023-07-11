@@ -12,7 +12,7 @@ export function ParentTweet(props) {
                             isRetweet
                             retweeter={props.retweeter}
                             hideActions
-                            className={"my-4 py-2 border bg-white text-dark rounded-pill"}
+                            className={"my-4 py-2 border bg-dark text-white rounded-pill"}
                             tweet={tweet.parent}
                             onDeleteSuccess={onDeleteSuccess} /> : null
 }
