@@ -73,7 +73,7 @@ export function BookmarksComponent() {
           currentUser={currentUser}
           didBookmarkRemoved={handleBookmarkRemoved}
           className="my-4 py-2 border bg-dark text-white rounded-pill w-50"
-          key={`${index}-{item.id}`}/>
+          key={`${index}-${item.id}`}/>
       })}
       <div ref={sentinel} />
       </React.Fragment> : <div>Loading...</div>

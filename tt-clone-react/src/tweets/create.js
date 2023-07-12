@@ -1,7 +1,7 @@
 import React from "react"
 import {apiTweetCreate, apiReplyCreate} from "./lookup"
 
-function CreateForm({onSubmit, placeholder}) {
+export function CreateForm({onSubmit, placeholder}) {
   const textAreaRef = React.createRef()
 
   const handleSubmit = (event) => {
