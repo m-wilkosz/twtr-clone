@@ -114,7 +114,7 @@ export function AddOrRemoveBookmarkBtn(props) {
 
   return (
     <React.Fragment>
-      <button className={className} onClick={handleClick}>
+      <button data-testid="delete-button" className={className} onClick={handleClick}>
         <i className="fas fa-bookmark"></i>
       </button>
 
