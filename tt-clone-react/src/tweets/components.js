@@ -129,6 +129,6 @@ export function TweetDetailComponent(props) {
           onDeleteSuccess={handleReplyDeleteSuccess}
           className="my-4 py-2 border bg-dark text-white rounded-pill w-50" />
       ))}
-    </div> : <div>Loading...</div>
+    </div> : <div data-testid="loading">Loading...</div>
   )
 }
