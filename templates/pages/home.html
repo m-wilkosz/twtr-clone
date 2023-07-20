@@ -3,7 +3,7 @@
 {% block content %}
 
 {% if request.user.is_authenticated %}
-    <div id="root"></div>
+    <div id="root" style="width: 1600px;"></div>
 {% else %}
     <div class="container mt-4">
         {% include "components/navbar.html" %}
