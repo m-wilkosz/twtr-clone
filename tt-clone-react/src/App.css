@@ -86,3 +86,7 @@
 .input-placeholder::placeholder {
   color: white;
 }
+
+.logout-link:hover {
+  color: #0D6EFD;
+}
