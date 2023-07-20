@@ -27,7 +27,7 @@ function ProfileBadge(props) {
                 </div>
                 <br/><br/>
                 <p align="left"><UserDisplay user={user} includeFullName hideLink /></p>
-                <p align="left" style={{width: "500px"}}>{user.bio}</p>
+                <p align="left" style={{width: "450px"}}>{user.bio}</p>
                 <p align="left">
                     <i class="fa fa-map-marker-alt"></i>&ensp;{user.location}
                     &ensp;&ensp;
