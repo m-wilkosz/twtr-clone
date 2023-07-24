@@ -5,7 +5,7 @@ export const useCurrentUser = () => {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/accounts/current-user/")
+    fetch(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/accounts/current-user/`)
       .then((response) => response.json())
       .then((data) => {
         setCurrentUser(data)

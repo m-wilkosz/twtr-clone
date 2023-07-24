@@ -29,7 +29,7 @@ export function apiTweetList(username, callback, nextUrl) {
         endpoint = `/tweets/?username=${username}`
     }
     if (nextUrl !== null &&  nextUrl !== undefined) {
-        endpoint = nextUrl.replace("http://localhost:8000/api", "")
+        endpoint = nextUrl.replace(`${process.env.REACT_APP_BACKEND_BASE_URL}/api`, "")
     }
     backendLookup("GET", endpoint, callback)
 }
@@ -37,7 +37,7 @@ export function apiTweetList(username, callback, nextUrl) {
 export function apiTweetFeed(callback, nextUrl) {
     let endpoint = "/tweets/feed"
     if (nextUrl !== null &&  nextUrl !== undefined) {
-        endpoint = nextUrl.replace("http://localhost:8000/api", "")
+        endpoint = nextUrl.replace(`${process.env.REACT_APP_BACKEND_BASE_URL}/api`, "")
     }
     backendLookup("GET", endpoint, callback)
 }

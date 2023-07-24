@@ -1,13 +1,26 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block content %}
 
-<div class="col-10 col-md-4 mx-auto">
-    <h1>{{ title }}</h1>
+<nav class="navbar navbar-expand-lg navbar-dark bg-tweetme mb-4" style="margin-top: 20px;">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent" style="background-color: #0D6EFD; border-radius: 50px;">
+      <ul class="navbar-nav" style="height: 40px;">
+        <li class="nav-item">
+          <a class="nav-link" style="margin-left: 600px;" href="/"><h5>{{ title }}</h5><span class="sr-only">(current)</span></a>
+        </li>
+      </ul>
+    </div>
+</nav>
+<div class="col-10 col-md-4 mx-auto text-center">
     {% if description %}
-        <p>{{ description }} </p>
+        <p>{{ description }}</p>
     {% endif %}
     {% include "components/form.html" with form=form btn_label=btn_label %}
+</div>
+<div>
+    </br><img src="{% static 'img/twtr.png' %}" alt="glitches" style="border: 5px solid #0D6EFD;">
 </div>
 
 {% endblock content %}

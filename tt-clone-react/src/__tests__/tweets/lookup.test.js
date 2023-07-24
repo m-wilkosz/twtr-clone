@@ -85,7 +85,7 @@ describe("API functions", () => {
 
     test("apiTweetFeed", () => {
         const callback = jest.fn()
-        const nextUrl = "http://localhost:8000/api/tweets/feed?page=2"
+        const nextUrl = `${process.env.REACT_APP_BACKEND_BASE_URL}/api/tweets/feed?page=2`
         apiTweetFeed(callback, nextUrl);
         expect(backendLookup).toHaveBeenCalledWith("GET", "/tweets/feed?page=2", callback)
     })
