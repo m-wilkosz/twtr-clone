@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, re_path, include
 
-from accounts.views import (login_view, logout_view, register_view)
+from accounts.views import (login_view, logout_view, register_view, activation_view)
 from tweets.views import home_view, tweets_list_view, tweets_detail_view
 
 urlpatterns = [
@@ -28,6 +28,7 @@ urlpatterns = [
     path("login/", login_view, name="login"),
     path("logout/", logout_view, name="logout"),
     path("register/", register_view, name="register"),
+    path("activation/(?P<uidb64>[0-9A-Za-z_\-]+)/(?P<token>[0-9A-Za-z]{1,13}-[0-9A-Za-z]{1,20})/", activation_view, name="activation"),
     path("<int:tweet_id>", tweets_detail_view),
     re_path(r"profiles?/", include("profiles.urls")),
     path("api/tweets/", include("tweets.api.urls")),
