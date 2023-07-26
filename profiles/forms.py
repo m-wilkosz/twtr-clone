@@ -9,7 +9,7 @@ class UserProfileForm(forms.ModelForm):
     bio = forms.CharField(required=False)
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'email']
+        fields = ["first_name", "last_name", "email"]
 
 class ProfileForm(forms.ModelForm):
     first_name = forms.CharField(required=False)
@@ -17,7 +17,7 @@ class ProfileForm(forms.ModelForm):
     email = forms.CharField(required=False)
     class Meta:
         model = Profile
-        fields = ['location', 'bio']
+        fields = ["location", "bio"]
 
 class ProfileBasicForm(forms.Form):
     first_name = forms.CharField(required=False)

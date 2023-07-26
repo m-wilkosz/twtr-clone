@@ -1,3 +1,4 @@
+import React from "react"
 import {render, waitFor} from "@testing-library/react"
 import "@testing-library/jest-dom/extend-expect"
 import {FollowListComponent} from "../../profiles/followlist.js"
@@ -12,6 +13,12 @@ global.IntersectionObserver = class IntersectionObserver {
     observe() {}
     takeRecords() {}
     unobserve() {}
+}
+
+global.MutationObserver = class {
+    constructor(callback) {}
+    disconnect() {}
+    observe(element, initObject) {}
 }
 
 describe("FollowListComponent", () => {

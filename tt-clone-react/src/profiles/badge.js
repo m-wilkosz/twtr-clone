@@ -5,7 +5,7 @@ import {UserDisplay, UserPicture} from "./components"
 import {DisplayCount} from "./utils"
 import {Link} from "react-router-dom"
 
-function ProfileBadge(props) {
+export function ProfileBadge(props) {
     const {user, didFollowToggle, profileLoading, currentUserUsername} = props
     let currentVerb = (user && user.is_following) ? "Unfollow" : "Follow"
     currentVerb = profileLoading ? "Loading..." : currentVerb
@@ -29,9 +29,9 @@ function ProfileBadge(props) {
                 <p align="left"><UserDisplay user={user} includeFullName hideLink /></p>
                 <p align="left" style={{width: "450px"}}>{user.bio}</p>
                 <p align="left">
-                    <i class="fa fa-map-marker-alt"></i>&ensp;{user.location}
+                    <i className="fa fa-map-marker-alt"></i>&ensp;{user.location}
                     &ensp;&ensp;
-                    <i class="fa fa-calendar-alt"></i>&ensp;Joined&ensp;
+                    <i className="fa fa-calendar-alt"></i>&ensp;Joined&ensp;
                                     {new Intl.DateTimeFormat("en-US", {month: "long", year: "numeric"}).format(new Date(user.timestamp))}</p>
                 <p style={{display: "flex", alignItems: "center"}}>
                     <Link to={`/profiles/${user.username}/followers`} style={{textDecoration: "none", color: "inherit"}}>
