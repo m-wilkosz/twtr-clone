@@ -28,7 +28,7 @@ test("renders ProfileBadge with user data", () => {
     render(<Router><ProfileBadge user={user} didFollowToggle={() => {}} profileLoading={false} /></Router>)
 
     expect(screen.getByText(/@testuser/i)).toBeInTheDocument()
-    expect(screen.getByText('Follow')).toBeInTheDocument()
+    expect(screen.getByText("Follow")).toBeInTheDocument()
 })
 
 test("ProfileBadge triggers follow/unfollow", () => {

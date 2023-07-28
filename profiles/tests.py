@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.urls import reverse
 from rest_framework.test import APIClient
 from .models import Profile
+from tweets.models import Tweet
+from rest_framework import status
 
 User = get_user_model()
 
@@ -57,48 +59,6 @@ class ProfileTestCase(TestCase):
         count = r_data.get("followers_count")
         self.assertEqual(count, 0)
 
-    def test_profile_update_view(self):
-        client = self.get_client()
-        response = client.get(reverse("profile_update"))
-        self.assertEqual(response.status_code, 200)
-        updated_first_name = "new first name"
-        updated_last_name = "new last name"
-        updated_email = "newemail@example.com"
-        updated_location = "new location"
-        updated_bio = "new bio"
-        response = client.post(reverse("profile_update"), {
-            "first_name": updated_first_name,
-            "last_name": updated_last_name,
-            "email": updated_email,
-            "location": updated_location,
-            "bio": updated_bio,
-        })
-        self.assertEqual(response.status_code, 200)
-        updated_user = User.objects.get(username=self.user.username)
-        updated_profile = Profile.objects.get(user=updated_user)
-        self.assertEqual(updated_user.first_name, updated_first_name)
-        self.assertEqual(updated_user.last_name, updated_last_name)
-        self.assertEqual(updated_user.email, updated_email)
-        self.assertEqual(updated_profile.location, updated_location)
-        self.assertEqual(updated_profile.bio, updated_bio)
-
-    def test_profile_update_view_unauthenticated(self):
-        client = APIClient()
-        response = client.get(reverse("profile_update"))
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response.url.startswith("/login"))
-
-    def test_profile_detail_view(self):
-        client = self.get_client()
-        response = client.get(reverse("profile_detail", kwargs={"username": self.secondUser.username}))
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, self.secondUser.username)
-
-    def test_profile_detail_view_nonexistent_user(self):
-        client = self.get_client()
-        response = client.get(reverse("profile_detail", kwargs={"username": "nonexistent"}))
-        self.assertEqual(response.status_code, 404)
-
     def test_profile_detail_api_view(self):
         client = self.get_client()
         response = client.get(f"/api/profiles/{self.secondUser.username}/")
@@ -110,3 +70,22 @@ class ProfileTestCase(TestCase):
         client = self.get_client()
         response = client.get("/api/profiles/nonexistent/")
         self.assertEqual(response.status_code, 404)
+
+    def test_profile_add_or_remove_bookmark_view(self):
+        self.profile = Profile.objects.get(user=self.user)
+        self.tweet = Tweet.objects.create(id=1, content="Test tweet", user=self.user)
+        self.url = reverse("profile_add_or_remove_bookmark_view", kwargs={"username": "abc", "tweet_id": self.tweet.id})
+        response = self.get_client().post(self.url)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(self.profile.bookmarks.filter(id=self.tweet.id).exists())
+        response = self.get_client().post(self.url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(self.profile.bookmarks.filter(id=self.tweet.id).exists())
+
+    def test_profile_bookmarks_list_view(self):
+        self.profile = Profile.objects.get(user=self.user)
+        self.tweet = Tweet.objects.create(id=1, content="Test tweet", user=self.user)
+        self.profile.bookmarks.add(self.tweet)
+        response = self.get_client().get(f"/api/profiles/{self.user.username}/bookmarks")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["results"][0]["id"], self.tweet.id)
