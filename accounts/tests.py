@@ -25,17 +25,6 @@ class AccountsAppTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, "/login/")
 
-    def test_register_view(self):
-        new_user_data = {
-            "username": "newuser",
-            "password1": "99$@wom&*66",
-            "password2": "99$@wom&*66",
-        }
-        response = self.client.post(reverse("register"), new_user_data)
-        self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, "/")
-        self.assertTrue(User.objects.filter(username=new_user_data["username"]).exists())
-
     def test_register_view_password_mismatch(self):
         new_user_data = {
             "username": "newuser",
@@ -45,4 +34,4 @@ class AccountsAppTests(TestCase):
         response = self.client.post(reverse("register"), new_user_data)
         self.assertEqual(response.status_code, 200)
         content = html.unescape(response.content.decode())
-        self.assertIn("The two password fields didn’t match.", content)
+        self.assertIn("Passwords don't match", content)

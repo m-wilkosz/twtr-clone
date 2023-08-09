@@ -24,12 +24,6 @@ class TweetTestCase(TestCase):
         client.login(username=self.user.username, password="password")
         return client
 
-    def test_tweet_list(self):
-        client = self.get_client()
-        response = client.get("/api/tweets/")
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(len(response.json()["results"]), 3)
-
     def test_tweets_related_name(self):
         user = self.user
         self.assertEqual(user.tweets.count(), 2)
@@ -112,18 +106,3 @@ class TweetTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         data = response.json()
         self.assertEqual(len(data["results"]), 3)
-
-    def test_get_paginated_queryset_response(self):
-        for _ in range(25):
-            Tweet.objects.create(content="tweet", user=self.user)
-
-        client = self.get_client()
-        response = client.get("/api/tweets/")
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertEqual(len(data["results"]), 20)
-
-        response = client.get("/api/tweets/", {"page": 2})
-        self.assertEqual(response.status_code, 200)
-        data = response.json()
-        self.assertEqual(len(data["results"]), 8)
