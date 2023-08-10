@@ -3,6 +3,7 @@ import {apiProfileLikes, apiProfileReplies} from "./lookup"
 import {Tweet} from "../tweets/detail"
 import {useCurrentUser} from "../auth/hooks"
 import {useParams} from "react-router-dom"
+import {Link} from "react-router-dom"
 
 export function UserLink(props) {
   const {username} = props
@@ -20,7 +21,11 @@ export function UserDisplay(props) {
   const nameDisplay = includeFullName === true ? `${user.first_name} ${user.last_name} ` : null
   return <React.Fragment>
             {nameDisplay}
-            {hideLink === true ? `@${user.username}` : <UserLink username={user.username}>@{user.username}</UserLink>}
+            {hideLink === true ? `@${user.username}` : <Link
+                                                        to={`/profiles/${user.username}`}
+                                                        style={{textDecoration: "none", color: "inherit"}}>
+                                                          @{user.username}
+                                                        </Link>}
           </React.Fragment>
 }
 
@@ -28,7 +33,7 @@ export function UserPicture(props) {
   const {user, hideLink} = props
   const userIdSpan = <span className="mx-1 px-3 py-2 rounded-circle bg-white text-dark">{user.username[0]}</span>
 
-  return hideLink === true ? userIdSpan : <UserLink username={user.username}>{userIdSpan}</UserLink>
+  return hideLink === true ? userIdSpan : <Link to={`/profiles/${user.username}`} style={{textDecoration: "none", color: "inherit"}}>{userIdSpan}</Link>
 }
 
 export function ProfileRepliesOrLikesComponent(props) {
