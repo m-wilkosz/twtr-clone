@@ -85,7 +85,7 @@ export function Tweet(props) {
             <div className="btn btn-group px-0">
               {actionTweet && hideActions !== true && (
                 <React.Fragment>
-                  <Button variant="primary" className="btn btn-primary rounded-pill mx-1" href={`/${tweet.id}`}>
+                  <Button variant="primary" className="btn btn-primary rounded-pill mx-1">
                     {repliesCount} <i className="fas fa-comment"></i>
                   </Button>
                   <ActionBtn
