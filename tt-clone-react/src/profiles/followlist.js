@@ -81,7 +81,7 @@ export function FollowListComponent(props) {
       }
 
       return <React.Fragment>{followList.map((item, index) => {
-        return <div className="my-4 py-2 border bg-white text-dark rounded-pill w-50" key={`${index}`}>
+        return <div className="my-4 py-2 border bg-dark text-white rounded-pill w-50" key={`${index}`}>
                     <UserPicture user={item} hideLink={false} />
                     &ensp;<UserDisplay user={item} includeFullName={true} hideLink={false} />
                     {profileUser === currentUser.username && followers === false ? <button

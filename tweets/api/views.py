@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from ..models import Tweet
 from ..serializers import TweetSerializer, TweetActionSerializer, TweetCreateSerializer
 from django.contrib.auth import get_user_model
+import re
 User = get_user_model()
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
@@ -156,7 +157,7 @@ def tweet_action_view(request, *args, **kwargs):
 def tweet_search_view(request, *args, **kwargs):
     query = request.GET.get("q", "")
     if query:
-        queryset = Tweet.objects.filter(content__iexact=query)
+        queryset = Tweet.objects.filter(content__iregex=r'\b' + re.escape(query) + r'\b')
         serializer = TweetSerializer(queryset, many=True)
         return Response(serializer.data, status=200)
     return Response([], status=200)
