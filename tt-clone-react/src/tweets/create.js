@@ -3,11 +3,13 @@ import {apiTweetCreate, apiReplyCreate} from "./lookup"
 
 export function CreateForm({onSubmit, placeholder}) {
   const textAreaRef = React.createRef()
+  const imageInputRef = React.createRef()
 
   const handleSubmit = (event) => {
     event.preventDefault()
     const newVal = textAreaRef.current.value
-    onSubmit(newVal)
+    const imageFile = imageInputRef.current.files[0]
+    onSubmit(newVal, imageFile)
     textAreaRef.current.value = ""
   }
 
@@ -21,7 +23,14 @@ export function CreateForm({onSubmit, placeholder}) {
           placeholder={placeholder}
           name="content">
         </input>
-        <button type="submit" className="btn btn-primary my-3 rounded-pill p-3 w-25"><i className="fas fa-paper-plane"></i>&emsp;Send</button>
+        <input
+          type="file"
+          ref={imageInputRef}
+          accept="image/*"
+        />
+        <button type="submit" className="btn btn-primary my-3 rounded-pill p-3 w-25">
+          <i className="fas fa-paper-plane"></i>&emsp;Send
+        </button>
       </form>
     </div>
   )
@@ -39,8 +48,13 @@ export function TweetCreate(props) {
     }
   }
 
-  const handleSubmit = (newVal) => {
-    apiTweetCreate(newVal, handleBackendUpdate)
+  const handleSubmit = (newVal, imageFile) => {
+    let formData = new FormData()
+    formData.append("content", newVal)
+    if (imageFile) {
+      formData.append("image", imageFile)
+    }
+    apiTweetCreate(formData, handleBackendUpdate)
   }
 
   return (
