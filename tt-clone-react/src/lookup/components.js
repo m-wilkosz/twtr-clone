@@ -13,9 +13,9 @@ function getCookie(name) {
   return cookieValue
 }
 
-export function backendLookup(method, endpoint, callback, data) {
+export function backendLookup(method, endpoint, callback, data, isFormData=false) {
   let jsonData
-  if (data) {
+  if (data && !isFormData) {
     jsonData = JSON.stringify(data)
   }
   const xhr = new XMLHttpRequest()
@@ -23,7 +23,11 @@ export function backendLookup(method, endpoint, callback, data) {
   xhr.responseType = "json"
   const csrftoken = getCookie("csrftoken")
   xhr.open(method, url)
-  xhr.setRequestHeader("Content-Type", "application/json")
+  if (!isFormData) {
+    xhr.setRequestHeader("content-type", "application/json")
+  } else {
+    xhr.setRequestHeader("enctype", "multipart/form-data")
+  }
   if (csrftoken) {
     xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest")
     xhr.setRequestHeader("X-CSRFToken", csrftoken)
@@ -43,5 +47,9 @@ export function backendLookup(method, endpoint, callback, data) {
     console.log(e)
     callback({"message": "An error occurred."}, 400)
   }
-  xhr.send(jsonData)
+  if (isFormData) {
+    xhr.send(data)
+  } else {
+    xhr.send(jsonData)
+  }
 }

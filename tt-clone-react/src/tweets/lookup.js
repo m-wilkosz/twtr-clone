@@ -1,7 +1,7 @@
 import {backendLookup} from "../lookup"
 
 export function apiTweetCreate(newTweet, callback) {
-    backendLookup("POST", "/tweets/create/", callback, {content: newTweet})
+    backendLookup("POST", "/tweets/create/", callback, newTweet, true)
 }
 
 export function apiReplyCreate(newTweet, upperTweetId, callback) {
