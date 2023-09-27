@@ -29,8 +29,10 @@ Implemented:
 - profile tab
 - bookmarks tab
 
+In progress:
+- sending images
+
 Maybe it will be implemented in the future:
 - explore tab
 - notifications
-- sending images
 - DMs
