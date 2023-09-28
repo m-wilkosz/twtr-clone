@@ -4,6 +4,14 @@ import {apiTweetCreate, apiReplyCreate} from "./lookup"
 export function CreateForm({onSubmit, placeholder}) {
   const textAreaRef = React.createRef()
   const imageInputRef = React.createRef()
+  const [imageName, setImageName] = React.useState("")
+
+  const handleImageChange = () => {
+    const file = imageInputRef.current.files[0]
+    if (file) {
+      setImageName(file.name)
+    }
+  }
 
   const handleSubmit = (event) => {
     event.preventDefault()
@@ -11,6 +19,7 @@ export function CreateForm({onSubmit, placeholder}) {
     const imageFile = imageInputRef.current.files[0]
     onSubmit(newVal, imageFile)
     textAreaRef.current.value = ""
+    setImageName("")
   }
 
   return (
@@ -23,14 +32,25 @@ export function CreateForm({onSubmit, placeholder}) {
           placeholder={placeholder}
           name="content">
         </input>
-        <input
-          type="file"
-          ref={imageInputRef}
-          accept="image/*"
-        />
-        <button type="submit" className="btn btn-primary my-3 rounded-pill p-3 w-25">
-          <i className="fas fa-paper-plane"></i>&emsp;Send
-        </button>
+        <div className="action-group d-flex justify-content-center align-items-center mt-2">
+          <div className="custom-file-upload mr-3">
+            <input
+              type="file"
+              id="file"
+              ref={imageInputRef}
+              accept="image/*"
+              style={{display: "none"}}
+              onChange={handleImageChange}
+            />
+            <label htmlFor="file" className="btn btn-outline-secondary rounded-pill p-2">
+              <i className="fas fa-upload"></i> Add image
+            </label>
+            <span className="file-name ml-2">{imageName}</span>
+          </div>
+          <button type="submit" className="btn btn-primary rounded-pill p-3 w-25">
+            <i className="fas fa-paper-plane"></i>&emsp;Send
+          </button>
+        </div>
       </form>
     </div>
   )

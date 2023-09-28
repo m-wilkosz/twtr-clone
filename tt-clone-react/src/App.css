@@ -90,3 +90,19 @@
 .logout-link:hover {
   color: #0D6EFD;
 }
+
+.action-group {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.custom-file-upload {
+  display: flex;
+  align-items: center;
+}
+
+.file-name {
+  margin-left: 10px;
+  margin-right: 10px;
+}
