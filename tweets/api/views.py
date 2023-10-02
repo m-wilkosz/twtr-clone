@@ -108,7 +108,7 @@ def tweet_detail_view(request, tweet_id, *args, **kwargs):
     if not qs.exists():
         return Response({}, status=404)
     obj = qs.first()
-    serializer = TweetSerializer(obj)
+    serializer = TweetSerializer(obj, context={"request": request})
     return Response(serializer.data)
 
 @api_view(["DELETE", "POST"])
