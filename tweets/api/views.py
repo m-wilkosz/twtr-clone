@@ -26,7 +26,6 @@ def tweet_create_view(request, *args, **kwargs):
 # @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def tweet_reply_create_view(request, tweet_id, *args, **kwargs):
-    print(request.data)
     try:
         tweet = Tweet.objects.get(id=tweet_id)
     except Tweet.DoesNotExist:
@@ -99,7 +98,7 @@ def tweet_previous_view(request, tweet_id, *args, **kwargs):
     qs = tweet.upper_tweet
     if qs == None:
         return Response({"detail": "This is first tweet in thread."}, status=200)
-    serializer = TweetSerializer(qs)
+    serializer = TweetSerializer(qs, context={"request": request})
     return Response(serializer.data)
 
 @api_view(["GET"])
@@ -158,6 +157,6 @@ def tweet_search_view(request, *args, **kwargs):
     query = request.GET.get("q", "")
     if query:
         queryset = Tweet.objects.filter(content__iregex=r'\b' + re.escape(query) + r'\b')
-        serializer = TweetSerializer(queryset, many=True)
+        serializer = TweetSerializer(queryset, many=True, context={"request": request})
         return Response(serializer.data, status=200)
     return Response([], status=200)

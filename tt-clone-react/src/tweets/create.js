@@ -96,8 +96,13 @@ export function ReplyCreate(props) {
     }
   }
 
-  const handleSubmit = (newVal) => {
-    apiReplyCreate(newVal, upperTweetId, handleBackendUpdate)
+  const handleSubmit = (newVal, imageFile) => {
+    let formData = new FormData()
+    formData.append("content", newVal)
+    if (imageFile) {
+      formData.append("image", imageFile)
+    }
+    apiReplyCreate(formData, upperTweetId, handleBackendUpdate)
   }
 
   return (

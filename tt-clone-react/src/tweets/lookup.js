@@ -5,7 +5,7 @@ export function apiTweetCreate(newTweet, callback) {
 }
 
 export function apiReplyCreate(newTweet, upperTweetId, callback) {
-    backendLookup("POST", `/tweets/${upperTweetId}/reply/`, callback, {content: newTweet})
+    backendLookup("POST", `/tweets/${upperTweetId}/reply/`, callback, newTweet, true)
 }
 
 export function apiRepliesList(upperTweetId, callback) {
