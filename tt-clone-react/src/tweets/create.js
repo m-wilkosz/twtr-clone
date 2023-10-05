@@ -1,5 +1,6 @@
-import React from "react"
+import React, {useEffect} from "react"
 import {apiTweetCreate, apiReplyCreate} from "./lookup"
+import ReconnectingWebSocket from "reconnecting-websocket"
 
 export function CreateForm({onSubmit, placeholder}) {
   const textAreaRef = React.createRef()
@@ -58,6 +59,31 @@ export function CreateForm({onSubmit, placeholder}) {
 
 export function TweetCreate(props) {
   const {didTweet} = props
+
+  useEffect(() => {
+    const ws = new ReconnectingWebSocket(`ws://${process.env.REACT_APP_BACKEND_BASE_HOST}/ws/tweets/`)
+
+    ws.onopen = () => {
+        console.log("connected to the websocket")
+    }
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+      didTweet(data)
+    }
+
+    ws.onerror = (error) => {
+      console.log(`WebSocket error: ${error}`)
+    }
+
+    ws.onclose = () => {
+      console.log("disconnected from the websocket")
+    }
+
+    return () => {
+      ws.close()
+    }
+  }, [didTweet])
 
   const handleBackendUpdate = (response, status) => {
     if (status === 201) {

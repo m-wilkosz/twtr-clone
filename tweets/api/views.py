@@ -8,22 +8,36 @@ from ..models import Tweet
 from ..serializers import TweetSerializer, TweetActionSerializer, TweetCreateSerializer
 from django.contrib.auth import get_user_model
 import re
+from django.core.serializers.json import DjangoJSONEncoder
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
+import json
 User = get_user_model()
 
 ALLOWED_HOSTS = settings.ALLOWED_HOSTS
 
 @api_view(["POST"])
-# @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def tweet_create_view(request, *args, **kwargs):
     serializer = TweetCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user)
+
+        data = json.loads(json.dumps(serializer.data, cls=DjangoJSONEncoder))
+
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            "tweets",
+            {
+                "type": "send_tweet",
+                "value": data
+            }
+        )
+
         return Response(serializer.data, status=201)
     return Response({}, status=400)
 
 @api_view(["POST"])
-# @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def tweet_reply_create_view(request, tweet_id, *args, **kwargs):
     try:
@@ -33,6 +47,18 @@ def tweet_reply_create_view(request, tweet_id, *args, **kwargs):
     serializer = TweetCreateSerializer(data=request.data)
     if serializer.is_valid(raise_exception=True):
         serializer.save(user=request.user, upper_tweet=tweet, is_reply=True)
+
+        data = json.loads(json.dumps(serializer.data, cls=DjangoJSONEncoder))
+
+        channel_layer = get_channel_layer()
+        async_to_sync(channel_layer.group_send)(
+            "tweets",
+            {
+                "type": "send_tweet",
+                "value": data
+            }
+        )
+
         return Response(serializer.data, status=201)
     return Response({}, status=400)
 

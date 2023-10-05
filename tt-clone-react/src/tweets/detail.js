@@ -74,7 +74,9 @@ export function Tweet(props) {
             <Link to={`/${tweet.id}`} className="tweet-wrapper" style={{textDecoration: "none", color: "inherit"}}>
               <div className="w-75">
                 <p>{tweet.content}</p>
-                {tweet.image && <img src={tweet.image} alt="" style={{maxWidth: "100%", height: "100%"}} />}
+                {tweet.image && <img src={tweet.image.startsWith("/media/")
+                                    ? `http://${process.env.REACT_APP_BACKEND_BASE_HOST}${tweet.image}`
+                                    : tweet.image} alt="" style={{maxWidth: "100%", height: "100%"}} />}
                 <ParentTweet
                   tweet={tweet}
                   retweeter={tweet.user}
